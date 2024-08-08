@@ -95,7 +95,9 @@ function(input, output, session) {
   )
 
   .doc_sentiment_tbl_rct <- reactive(
-    calc_doc_sentiment_tbl(vals$sen_vec, .sentiment_tbl=vals$senti_dict_tbl)
+    vns::calc_doc_tok_sentidict_tbl(
+      .doc_vec=vals$sen_vec, .sentidict_tbl=vals$senti_dict_tbl
+    )
   )
 
   observeEvent(input$delete_row, {
@@ -168,12 +170,12 @@ function(input, output, session) {
   output$senti_dict_tbl <- gt::render_gt({
     .senti_dict_smpl_tbl <<-
       vals$senti_dict_tbl |>
-      dplyr::slice_sample(n=5) |>
+      dplyr::slice_sample(n=10) |>
       dplyr::arrange(tok_pol_num)
 
     .senti_dict_smpl_gt <<-
       .senti_dict_smpl_tbl |>
-      dplyr::slice_sample(n=5) |>
+      dplyr::slice_sample(n=10) |>
       dplyr::arrange(tok_pol_num) |>
       gt::gt()
 

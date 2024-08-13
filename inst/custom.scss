@@ -14,8 +14,42 @@
   }
 }
 
-body { 
+html {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
   // background-color: $body-bg;
+  margin: 0;
+  flex: 0 1 auto;
+  align-self: auto;
+  /*recommend 1920 / 1080 max based on usage stats, use 100% to that point*/
+  width: 100%;
+  max-width: 900px;
+}
+
+p {
+  font-style: normal;
+  padding: 0;
+  margin-top: 0;
+  margin-left: 0px ;
+  margin-right: .5em ;
+  margin-bottom: 0;
+  text-indent: 1em;
+  text-align: justify;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  -o-hyphens: auto;
+  word-break:break-word;
+  hyphens: auto;
 }
 
 .bslib-page-sidebar > .navbar {
@@ -87,7 +121,7 @@ body {
         clear: both;
     }
     a {
-        color: #777; 
+        color: #777;
     }
 }
 

@@ -24,7 +24,7 @@ page_fillable(
   ),
   withMathJax(),
   tags$h1("Sentimentanalyse"),
-  tags$p("Sentimentanalyse ist ein Verfahren der Data Science, das darauf abzielt, Meinungen, Emotionen und Einstellungen in Textdaten automatisch zu identifizieren und zu klassifizieren. Sie nutzt Techniken aus der Verarbeitung natürlicher Sprache (engl.: natural language processing oder kurz NLP), um zu bestimmen, ob ein gegebener Text eine positive, negative oder neutrale Stimmung ausdrückt."),
+  tags$p("Sentimentanalyse ist ein Verfahren der Data Science, das darauf abzielt, Meinungen, Emotionen und Einstellungen in Textdaten automatisch zu identifizieren und zu klassifizieren. Sie nutzt Techniken aus der Verarbeitung natürlicher Sprache (engl.: „natural language processing“ oder kurz NLP), um zu bestimmen, ob ein gegebener Text eine positive, negative oder neutrale Stimmung ausdrückt.", lang="de"),
   tags$p("Unternehmen setzen Sentimentanalyse häufig ein, um Kundenfeedback aus sozialen Medien, Rezensionen oder Umfragen zu analysieren. So können sie wertvolle Einblicke in die Kundenzufriedenheit und Markttrends gewinnen. Ein Beispiel für die Anwendung ist die Überwachung von Social-Media-Kanälen, um in Echtzeit auf Kundenmeinungen zu Produkten oder Dienstleistungen reagieren zu können."),
   tags$h2("Lexikonbasierte Senitmentanalyse"),
   tags$p("Die lexikonbasierte Sentimentanalyse ist eine Methode, bei der vorab definierte Wörterlisten, sogenannte Sentimentlexika, verwendet werden, um die Stimmung eines Textes zu bestimmen. Diese Lexika enthalten Wörter, die mit positiven oder negativen Gefühlen assoziiert sind, oft mit einem entsprechenden Gewicht oder Score, der die Stärke des Ausdrucks angibt."),

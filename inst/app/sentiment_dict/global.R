@@ -3,9 +3,14 @@ library(stringi)
 
 `%||%` <- rlang::`%||%`
 
-# if(!"vns_condaenv" %in% reticulate::conda_list()[["name"]]){
-vns::setup_vns_condaenv(.install_conda=TRUE, .create_condaenv=TRUE)
-# }
+if(
+  tryCatch(
+    expr={!"vns_condaenv" %in% reticulate::conda_list()[["name"]]},
+    error=\(...){TRUE}
+  )
+){
+  vns::setup_vns_condaenv(.install_miniconda=TRUE, .create_condaenv=TRUE)
+}
 
 vns::use_vns_condaenv()
 

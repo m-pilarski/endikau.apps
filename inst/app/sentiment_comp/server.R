@@ -1,17 +1,9 @@
 library(shiny)
 
-example_review <- paste0(
-  "Leider nicht erhalten. Schade, dass der Artikel bis heute noch nicht ",
-  "angekommen ist. Auf mehrmaliges Nachfragen wurde mir zweimal versprochen, ",
-  "dass Ersatz verschickt worden sei. Es kann schon mal vorkommen, dass eine ",
-  "Sendung verloren geht, aber dass drei!!! Warensendungen innerhalb 4 Wochen ",
-  "nicht ankommen, finde ich sehr verwunderlich. Geld wurde zurückerstattet."
-)
-
 function(input, output, session) {
 
   vals <- reactiveValues(
-    sen_vec = example_review,
+    sen_vec = character(),
     # sen_vec = c("ich mag das nicht", "das gefällt mir"),
     senti_dict_tbl = endikau.data::sentiws_tbl
   )
@@ -88,7 +80,9 @@ function(input, output, session) {
     input$sen_random, {
       updateTextInput(
         session=session, inputId="sen_input",
-        value=random_review()
+        value=with(dplyr::slice_sample(endikau.data::amazon_review_tbl, n=1), {
+          stringi::stri_c(doc_title, ": ", doc_text)
+        })
       )
     }
   )
@@ -98,10 +92,6 @@ function(input, output, session) {
       vals$sen_vec <- c(input$sen_input, vals$sen_vec)
       updateTextInput(session=session, inputId="sen_input", value="")
     }
-  )
-
-  .doc_parse_spacy_tbl_rct <- reactive(
-    vns::parse_doc_spacy(.doc_str=vals$sen_vec)
   )
 
   .doc_sentiment_tbl_rct <- reactive(
@@ -117,46 +107,6 @@ function(input, output, session) {
       )
     )
     vals$sen_vec <- vals$sen_vec[-idx]
-  })
-
-  observe({
-    updateTextInput(
-      session=session, inputId="sen_input",
-      value=vals$sen_vec[[1]]
-    )
-  })
-
-  output$parse_spacy_table <- gt::render_gt({
-
-    .table_data <- .doc_parse_spacy_tbl_rct()
-
-    if(nrow(.table_data) == 0){
-      NULL
-    }else{
-      .table_data |>
-        mutate(across(everything(), as.character)) |>
-        relocate(tok_str, .before=0) |>
-        tibble::rowid_to_column("rowid") |>
-        tibble::column_to_rownames("rowid") |>
-        as.matrix() |>
-        t() |>
-        tibble::as_tibble(rownames="feature") |>
-        gt::gt() |>
-        gt::tab_style(
-          style = list(
-            # gt::cell_fill(color = "#bababa"),
-            gt::cell_borders(color="#bababa"),
-            gt::cell_text(weight = "bold")
-          ),
-          locations = gt::cells_body(rows=1)
-        ) |>
-        gt::tab_options(column_labels.hidden=TRUE) # |>
-        # gt::cols_label(
-        #   doc_text_html = "Text",
-        #   doc_pol_norm = "Sentimentwert"
-        # )
-
-    }
   })
 
   output$sentiment_table <- gt::render_gt({

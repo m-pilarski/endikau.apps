@@ -3,7 +3,6 @@ library(stringi)
 
 `%||%` <- rlang::`%||%`
 
-# TODO: move to {vns}
 if(!"vns_condaenv" %in% reticulate::conda_list()[["name"]]){
   vns::setup_vns_condaenv(.install_conda=TRUE, .create_condaenv=TRUE)
 }

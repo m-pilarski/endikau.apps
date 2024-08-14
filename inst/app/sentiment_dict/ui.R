@@ -13,7 +13,7 @@ theme <- bs_add_rules(
     font_scale=1.25,
     # preset=c(builtin_themes(), bootswatch_themes())[4]
   ),
-  sass::sass_file(system.file("custom.scss", package="endikau.apps"))
+  sass::sass_file(system.file("app", "custom.scss", package="endikau.apps"))
 )
 
 page_fillable(

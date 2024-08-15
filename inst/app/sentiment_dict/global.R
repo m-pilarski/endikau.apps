@@ -3,6 +3,8 @@ library(stringi)
 
 `%||%` <- rlang::`%||%`
 
+vns::setup_vns_condaenv(.install_miniconda=TRUE, .create_condaenv=TRUE)
+
 vns::use_vns_condaenv()
 
 germansentiment_model <- vns::load_germansentiment_model()

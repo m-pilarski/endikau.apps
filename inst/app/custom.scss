@@ -51,10 +51,10 @@ p {
   font-style: normal;
   padding: 0;
   margin-top: 0;
-  margin-left: 0px ;
-  margin-right: .5em ;
+  margin-left: 0 ;
+  margin-right: 0.5em ;
   margin-bottom: 0;
-  text-indent: 1em;
+  text-indent: 1.5em;
   text-align: justify;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -84,11 +84,11 @@ p {
 .sen-neg-min{background: #eeb479;}
 .sen-neg-med{background: #e88471;}
 .sen-neg-max{background: #cf597e;}
+.sen-miss{color: #bababa}
 .bubble{
     float: left;
     padding: 1.5px;
     border-radius: 0;
-    color: #000000;
     position: relative;
     // font-size: 15px;
     // line-height: 17px;

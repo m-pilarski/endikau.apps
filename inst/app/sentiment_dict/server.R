@@ -217,6 +217,21 @@ function(input, output, session) {
     }
   })
 
+  output$sentiment_text <- renderText(
+    .doc_sentiment_tbl_rct() |>
+      slice_min(doc_id, n=1) |>
+      mutate(across(where(is.factor), as.character)) |>
+      purrr::transpose() |>
+      purrr::map_chr(\(.tok_data){
+        stringi::stri_c(
+          "<span class='", .tok_data$tok_pol_lab, " bubble' data-toggle='tooltip' ",
+          "data-placement='top' title='", .tok_data$tok_pol_num, "'>",
+          .tok_data$tok_str_raw, "</span>"
+        )
+      }) |>
+      stringi::stri_c(collapse="")
+  )
+
   output$senti_dict_tbl <- gt::render_gt({
     .senti_dict_smpl_tbl <<-
       vals$senti_dict_tbl |>

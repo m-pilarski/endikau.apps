@@ -20,7 +20,7 @@ theme <- bs_add_rules(
 page_sidebar(
   withMathJax(),
   sidebar=HTML(paste0(
-    "<nav id='navbar-example3' class='h-100 flex-column align-items-stretch pe-4 border-end'>",
+    "<nav id='navbar-sentiment' class='h-100 flex-column align-items-stretch pe-4 border-end'>",
     "  <nav class='nav nav-pills flex-column'>",
     "    <a class='nav-link' href='#item-1'>Sentimentanalyse</a>",
     "    <nav class='nav nav-pills flex-column'>",
@@ -88,26 +88,23 @@ page_sidebar(
         height="213px"
       ),
       p_de("Anschließend werden die Wörter des Textes mit den Einträgen im Lexikons (bspw. SentiWS oder German Polarity Clues) abgeglichen. Die aggregierten Gewichte der Wörter aus dem Lexikon geben schließlich die Gesamtstimmung des Textes wieder."),
-      column(
-        width=12,
-        HTML(as.character(tags$table(
-          tags$tr(
-            tags$td(tags$div("Sentimentlexikon", style="padding-right: 1.5em;")),
-            tags$td(
-              tags$div(
-                tagAppendAttributes(
-                  shinyWidgets::pickerInput(
-                    inputId="senti_dict",
-                    label=NULL,
-                    choices=c("SentiWS", "German Polarity Clues"),
-                  )
-                ) # ,
-                # `data-bs-target`="none"
-              )
+      HTML(as.character(tags$table(
+        tags$tr(
+          tags$td(tags$div("Sentimentlexikon", style="padding-right: 1.5em;")),
+          tags$td(
+            tags$div(
+              tagAppendAttributes(
+                shinyWidgets::pickerInput(
+                  inputId="senti_dict",
+                  label=NULL,
+                  choices=c("SentiWS", "German Polarity Clues"),
+                )
+              ) # ,
+              # `data-bs-target`="none"
             )
           )
-        ))),
-      ),
+        )
+      ))),
       accordion(
         accordion_panel(
           title="",
@@ -236,10 +233,13 @@ page_sidebar(
       ),
       id="item-1-2"
     ),
-    id="item-1"
+    id="item-1",
   ),
   theme=theme,
-  `data-bs-spy`="scroll", `data-bs-target`="#navbar-example3", `data-bs-smooth-scroll`="true", class="scrollspy-example-2", tabindex="0"
+  `data-bs-spy`="scroll",
+  `data-bs-target`="#navbar-sentiment",
+  `data-bs-smooth-scroll`="true",
+  tabindex="0"
 )
 
 

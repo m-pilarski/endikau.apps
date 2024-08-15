@@ -5,9 +5,6 @@ library(bslib)
 
 theme <- bs_add_rules(
   bs_theme(
-    # bg="#353942",
-    # fg="#e5e5e5",
-    # primary="#165a97",
     base_font=font_google("Source Serif 4"),
     code_font=font_google("IBM Plex Mono"),
     heading_font=font_google("Bebas Neue", wght=400),
@@ -23,8 +20,14 @@ toc_content <- tags$div(
     "  <nav class='nav nav-pills flex-column'>",
     "    <a class='nav-link' href='#item-1'>Sentimentanalyse</a>",
     "    <nav class='nav nav-pills flex-column'>",
-    "      <a class='nav-link ms-3 my-1' href='#item-1-1'>Lexikonbasierte Senitmentanalyse</a>",
-    "      <a class='nav-link ms-3 my-1' href='#item-1-2'>Vortrainierte Transformer-Modelle für Sentimentanalyse</a>",
+    "      <a class='nav-link ms-2 my-1' href='#item-1-1'>Lexikonbasiert</a>",
+    "      <nav class='nav nav-pills flex-column'>",
+    "        <a class='nav-link ms-4 my-1' href='#item-1-1-1'>Textaufbereitung</a>",
+    "        <a class='nav-link ms-4 my-1' href='#item-1-1-2'>Sentimentlexika</a>",
+    "        <a class='nav-link ms-4 my-1' href='#item-1-1-3'>Berechnung</a>",
+    "        <a class='nav-link ms-4 my-1' href='#item-1-1-4'>Kritik</a>",
+    "      </nav>",
+    "      <a class='nav-link ms-2 my-1' href='#item-1-2'>Machine-Learning-Basiert</a>",
     "    </nav>",
     "  </nav>",
     "</nav>"
@@ -43,147 +46,160 @@ main_content <- tags$div(
     tags$div(
       tags$h3("Lexikonbasierte Senitmentanalyse"),
       p_de("Die lexikonbasierte Sentimentanalyse ist eine Methode, bei der vorab definierte Wörterlisten, sogenannte Sentimentlexika, verwendet werden, um die Stimmung eines Textes zu bestimmen. Diese Lexika enthalten Wörter, die mit positiven oder negativen Gefühlen assoziiert sind, oft mit einem entsprechenden Gewicht, das die Stärke des Ausdrucks angibt."),
-      card(
+      tags$div(
         # card_title("Beispieltext"),
-        card_body(
-          tagAppendAttributes(
-            shiny::textAreaInput(
-              label="Beispieltext", inputId="sen_input-1", value="", rows=5,
-              resize="none", width="100%"
-            ),
+        tagAppendAttributes(
+          shiny::textAreaInput(
+            label="Beispieltext", inputId="sen_input-1", value="", rows=5,
+            resize="none", width="100%"
           ),
-          fluidRow(
-            column(
-              width=6,
-              bslib::input_task_button(
-                id="sen_random-1", class="block", label="Vorschlagen",
-                icon=icon("dice"), label_busy="",
-                icon_busy=tags$i(
-                  class="fa-solid fa-sync fa-spin", role="presentation"
-                ),
-              )
-            ),
-            column(
-              width=6,
-              bslib::input_task_button(
-                id="sen_add-1", class="block", label="Analysieren",
-                icon=icon("calculator"), label_busy="",
-                icon_busy=tags$i(
-                  class="fa-solid fa-sync fa-spin", role="presentation"
-                ),
-              )
+        ),
+        fluidRow(
+          column(
+            width=6,
+            bslib::input_task_button(
+              id="sen_random-1", class="block", label="Vorschlagen",
+              icon=icon("dice"), label_busy="",
+              icon_busy=tags$i(
+                class="fa-solid fa-sync fa-spin", role="presentation"
+              ),
             )
           ),
-          fill=FALSE
-        )
-      ),
-      p_de("Der Prozess beginnt mit der Aufbereitung der Textdaten, die sowohl verschieden Schritter der Normalisierung als auch die Tokenisierung umfasst, um den Text in eine verarbeitbare Form zu bringen."),
-      fluidRow(
-        shinycssloaders::withSpinner(
-          gt::gt_output(outputId="parse_spacy_table"),
-          color="#bababa",
-          proxy.height="213px"
+          column(
+            width=6,
+            bslib::input_task_button(
+              id="sen_add-1", class="block", label="Analysieren",
+              icon=icon("calculator"), label_busy="",
+              icon_busy=tags$i(
+                class="fa-solid fa-sync fa-spin", role="presentation"
+              ),
+            )
+          )
         ),
-        height="213px"
+        HTML("<br>"),
+        style="max-height: 600px;"
       ),
-      p_de("Anschließend werden die Wörter des Textes mit den Einträgen im Lexikons (bspw. SentiWS oder German Polarity Clues) abgeglichen. Die aggregierten Gewichte der Wörter aus dem Lexikon geben schließlich die Gesamtstimmung des Textes wieder."),
-      card(
-        HTML(as.character(
-          tagAppendAttributes(
+      tags$div(
+        tags$h4("Textaufbereitung"),
+        p_de("Der Prozess beginnt mit der Aufbereitung der Textdaten, die sowohl verschieden Schritter der Normalisierung als auch die Tokenisierung umfasst, um den Text in eine verarbeitbare Form zu bringen."),
+        tags$div(
+          fluidRow(
+            gt::gt_output(outputId="parse_spacy_table"),
+            height="100%"
+          ),
+          style="max-height: 300px;"
+        ),
+        HTML("<br>"),
+        id="item-1-1-1"
+      ),
+      tags$div(
+        tags$h4("Sentimentlexikon"),
+        p_de("Anschließend werden die Wörter des Textes mit den Einträgen im Lexikons (bspw. SentiWS oder German Polarity Clues) abgeglichen. Die aggregierten Gewichte der Wörter aus dem Lexikon geben schließlich die Gesamtstimmung des Textes wieder."),
+        tags$div(
+          fluidRow(
             shinyWidgets::pickerInput(
               inputId="senti_dict",
               label="Sentimentlexikon",
               choices=c("SentiWS", "German Polarity Clues"),
             )
-          )
-        )),
-        gt::gt_output(outputId="senti_dict_tbl"),
-        HTML(
-          # https://tilemill-project.github.io/tilemill/docs/guides/advanced-legends/
-          "<div class='my-legend'>",
-          "  <div class='legend-title'>Sentimentwert</div>",
-          "  <div class='legend-scale'>",
-          "    <ul class='legend-labels'>",
-          "      <li><span class='sen-neg-max'></span>negativ</li>",
-          "      <li><span class='sen-neg-med'></span></li>",
-          "      <li><span class='sen-neg-min'></span></li>",
-          "      <li><span class='sen-neu'></span>neutral</li>",
-          "      <li><span class='sen-pos-min'></span></li>",
-          "      <li><span class='sen-pos-med'></span></li>",
-          "      <li><span class='sen-pos-max'></span>positiv</li>",
-          "    </ul>",
-          "  </div>",
-          "</div>"
-        )
-      ),
-      p_de("Dieses Verfahren ist relativ einfach zu implementieren und erfordert keine umfangreichen Trainingsdaten, was es besonders für kleine Unternehmen mit begrenzten Ressourcen attraktiv macht."),
-      card(
-        fluidRow(
-          column(
-            width=12, uiOutput(outputId="sentiment_text")
-          )
+          ),
+          fluidRow(
+            gt::gt_output(outputId="senti_dict_tbl"),
+            HTML(
+              # https://tilemill-project.github.io/tilemill/docs/guides/advanced-legends/
+              "<div class='my-legend'>",
+              "  <div class='legend-title'>Sentimentwert</div>",
+              "  <div class='legend-scale'>",
+              "    <ul class='legend-labels'>",
+              "      <li><span class='sen-neg-max'></span>negativ</li>",
+              "      <li><span class='sen-neg-med'></span></li>",
+              "      <li><span class='sen-neg-min'></span></li>",
+              "      <li><span class='sen-neu'></span>neutral</li>",
+              "      <li><span class='sen-pos-min'></span></li>",
+              "      <li><span class='sen-pos-med'></span></li>",
+              "      <li><span class='sen-pos-max'></span>positiv</li>",
+              "    </ul>",
+              "  </div>",
+              "</div>"
+            )
+          ),
+          style="max-height: 800px;",
         ),
-        fill=FALSE
+        HTML("<br>"),
+        id="item-1-1-2"
       ),
       tags$div(
+        tags$h4("Berechnung"),
+        p_de("Dieses Verfahren ist relativ einfach zu implementieren und erfordert keine umfangreichen Trainingsdaten, was es besonders für kleine Unternehmen mit begrenzten Ressourcen attraktiv macht."),
+        fluidRow(uiOutput(outputId="sentiment_text")),
+        HTML("<br>"),
+        style="max-height: 800px; width: 100%;",
+        id="item-1-1-3",
+      ),
+      tags$div(
+        tags$h4("Kritik"),
         p_de("Aufgrund ihrer Einfachheit hat die lexikonbasierte Sentimentanalyse einige Schwächen. Eine der größten Herausforderungen ist der Umgang mit Kontext und Mehrdeutigkeit von Wörtern. Ein Wort wie „interessant“ kann je nach Kontext sowohl positiv als auch neutral oder negativ gemeint sein, was das Lexikon oft nicht korrekt erfasst."),
-        p_de("Außerdem kann diese Methode ironische oder sarkastische Aussagen nicht zuverlässig erkennen, da die wörtliche Bedeutung der Begriffe analysiert wird, ohne den eigentlichen Kontext zu berücksichtigen. Zudem sind Sentiment-Lexika oft nicht umfassend genug, um die Nuancen und Entwicklungen der Sprache abzubilden, was zu ungenauen Ergebnissen führen kann. Diese Schwächen können dazu führen, dass die lexikonbasierte Sentimentanalyse in komplexeren Szenarien weniger präzise ist als modellbasierte Ansätze.")
+        p_de("Außerdem kann diese Methode ironische oder sarkastische Aussagen nicht zuverlässig erkennen, da die wörtliche Bedeutung der Begriffe analysiert wird, ohne den eigentlichen Kontext zu berücksichtigen. Zudem sind Sentiment-Lexika oft nicht umfassend genug, um die Nuancen und Entwicklungen der Sprache abzubilden, was zu ungenauen Ergebnissen führen kann. Diese Schwächen können dazu führen, dass die lexikonbasierte Sentimentanalyse in komplexeren Szenarien weniger präzise ist als modellbasierte Ansätze."),
+        HTML("<br>"),
+        id="item-1-1-4"
       ),
       HTML("<br>"),
       id="item-1-1"
     ),
     tags$div(
-      tags$h3("Vortrainierte Transformer-Modelle für Sentimentanalyse"),
+      tags$h3("Machine-Learning-Basierte Sentimentanalyse"),
       p_de("Im Gegensatz zu lexikonbasierten Ansätzen bieten vortrainierte transformer-basierte Modelle, wie beispielsweise BERT (Bidirectional Encoder Representations from Transformers) und GPT (Generative Pre-trained Transformer), eine fortschrittliche Möglichkeit zur Sentimentanalyse. Diese Modelle sind auf großen Textkorpora vortrainiert und können kontextabhängige Bedeutungen erfassen, was ihnen ermöglicht, die Stimmung eines Textes mit hoher Genauigkeit zu bestimmen. Sie verwenden Mechanismen wie die Selbstaufmerksamkeit, um Beziehungen zwischen Wörtern im Text besser zu verstehen, selbst wenn diese weit voneinander entfernt sind. Dies erlaubt ihnen, subtile sprachliche Nuancen, Mehrdeutigkeiten und komplexe Sprachstrukturen zu erkennen und zu interpretieren. Ein wesentlicher Vorteil dieser Modelle ist ihre Fähigkeit, auch in unbekannten Domänen oder bei sarkastischen und ironischen Texten zuverlässige Ergebnisse zu liefern, da sie aus einer Vielzahl von Beispielen lernen. Darüber hinaus können sie ohne spezifische Lexika auskommen und sind durch Fine-Tuning flexibel an spezifische Anwendungsfälle anpassbar, was sie besonders leistungsstark und vielseitig macht."),
-      card(
-        height="600px",
-        fluidRow(
-          column(
-            tagAppendAttributes(
-              shiny::textAreaInput(
-                inputId="sen_input-2", label="", value="", rows=5, resize="none",
-                width="100%"
-              )
-            ),
-            width=12
-          )
-        ),
-        fluidRow(
-          column(
-            width=6,
-            bslib::input_task_button(
-              id="sen_random-2", label="", icon=icon("dice"), label_busy="",
-              icon_busy=icon("dice"), style="--bs-btn-padding-y: .35em;"
-            )
-          ),
-          column(
-            width=6,
-            bslib::input_task_button(
-              id="sen_add-2", label="", icon=icon("plus"), label_busy="",
-              icon_busy=icon("plus"), style="--bs-btn-padding-y: .35em;"
-            )
-          )
-        ),
-        fill=FALSE
-      ),
+      # card(
+      #   height="600px",
+      #   fluidRow(
+      #     column(
+      #       tagAppendAttributes(
+      #         shiny::textAreaInput(
+      #           inputId="sen_input-2", label="", value="", rows=5, resize="none",
+      #           width="100%"
+      #         )
+      #       ),
+      #       width=12
+      #     )
+      #   ),
+      #   fluidRow(
+      #     column(
+      #       width=6,
+      #       bslib::input_task_button(
+      #         id="sen_random-2", label="", icon=icon("dice"), label_busy="",
+      #         icon_busy=icon("dice"), style="--bs-btn-padding-y: .35em;"
+      #       )
+      #     ),
+      #     column(
+      #       width=6,
+      #       bslib::input_task_button(
+      #         id="sen_add-2", label="", icon=icon("plus"), label_busy="",
+      #         icon_busy=icon("plus"), style="--bs-btn-padding-y: .35em;"
+      #       )
+      #     )
+      #   ),
+      #   height="400px",
+      #   fill=FALSE
+      # ),
       id="item-1-2"
     ),
-    id="item-1",
+    id="item-1"
   )
 )
 
 page_fillable(
   layout_sidebar(
     sidebar=sidebar(toc_content, open=list(desktop="always", mobile="closed")),
-    main_content,
-    # style="height: 100%;",
+    tags$div(
+      main_content,
+      # style="height: 100%;",
+    ),
+    tabindex="0",
     `data-bs-spy`="scroll",
     `data-bs-target`="#navbar-sentiment",
-    `data-bs-smooth-scroll`="true",
-    tabindex="0"
+    `data-bs-smooth-scroll`="true"
   ),
-  padding = 0, gap = 0,
-  theme=theme
+  title="sentiment app", lang="de", padding=0, gap=0, theme=theme
 )
 
 

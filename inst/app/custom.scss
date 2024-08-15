@@ -16,6 +16,16 @@
 
 .collapse-toggle {display: none !important;}
 
+body {
+  position: relative;
+}
+
+html, body {
+  overflow-y: scroll;
+	overflow-x: unset; /* or initial */
+  height:100%;
+}
+
 html {
   display: flex;
   flex-flow: row nowrap;
@@ -31,12 +41,12 @@ html {
 
 body {
   // background-color: $body-bg;
-  margin: 0;
-  flex: 0 1 auto;
-  align-self: auto;
-  /*recommend 1920 / 1080 max based on usage stats, use 100% to that point*/
-  width: 100%;
-  max-width: 1100px;
+  // margin: 0;
+  // flex: 0 1 auto;
+  // align-self: auto;
+  /* recommend 1920 / 1080 max based on usage stats, use 100% to that point */
+  // width: 100%;
+  // max-width: 1100px;
 }
 
 .block {

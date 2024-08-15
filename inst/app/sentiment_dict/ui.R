@@ -44,40 +44,38 @@ main_content <- tags$div(
       tags$h3("Lexikonbasierte Senitmentanalyse"),
       p_de("Die lexikonbasierte Sentimentanalyse ist eine Methode, bei der vorab definierte Wörterlisten, sogenannte Sentimentlexika, verwendet werden, um die Stimmung eines Textes zu bestimmen. Diese Lexika enthalten Wörter, die mit positiven oder negativen Gefühlen assoziiert sind, oft mit einem entsprechenden Gewicht, das die Stärke des Ausdrucks angibt."),
       card(
-        fluidRow(
-          column(
-            tagAppendAttributes(
-              shiny::textAreaInput(
-                inputId="sen_input", label="", value="", rows=5, resize="none",
-                width="100%"
-              ),
+        # card_title("Beispieltext"),
+        card_body(
+          tagAppendAttributes(
+            shiny::textAreaInput(
+              label="Beispieltext", inputId="sen_input-1", value="", rows=5,
+              resize="none", width="100%"
             ),
-            width=12
-          )
-        ),
-        fluidRow(
-          column(
-            width=6,
-            bslib::input_task_button(
-              id="sen_random", class="block", label="Beispieltext",
-              icon=icon("dice"), label_busy="",
-              icon_busy=tags$i(
-                class="fa-solid fa-sync fa-spin", role="presentation"
-              ),
+          ),
+          fluidRow(
+            column(
+              width=6,
+              bslib::input_task_button(
+                id="sen_random-1", class="block", label="Vorschlagen",
+                icon=icon("dice"), label_busy="",
+                icon_busy=tags$i(
+                  class="fa-solid fa-sync fa-spin", role="presentation"
+                ),
+              )
+            ),
+            column(
+              width=6,
+              bslib::input_task_button(
+                id="sen_add-1", class="block", label="Analysieren",
+                icon=icon("calculator"), label_busy="",
+                icon_busy=tags$i(
+                  class="fa-solid fa-sync fa-spin", role="presentation"
+                ),
+              )
             )
           ),
-          column(
-            width=6,
-            bslib::input_task_button(
-              id="sen_add", class="block", label="Analysieren",
-              icon=icon("calculator"), label_busy="",
-              icon_busy=tags$i(
-                class="fa-solid fa-sync fa-spin", role="presentation"
-              ),
-            )
-          )
-        ),
-        fill=FALSE
+          fill=FALSE
+        )
       ),
       p_de("Der Prozess beginnt mit der Aufbereitung der Textdaten, die sowohl verschieden Schritter der Normalisierung als auch die Tokenisierung umfasst, um den Text in eine verarbeitbare Form zu bringen."),
       fluidRow(
@@ -89,46 +87,34 @@ main_content <- tags$div(
         height="213px"
       ),
       p_de("Anschließend werden die Wörter des Textes mit den Einträgen im Lexikons (bspw. SentiWS oder German Polarity Clues) abgeglichen. Die aggregierten Gewichte der Wörter aus dem Lexikon geben schließlich die Gesamtstimmung des Textes wieder."),
-      HTML(as.character(tags$table(
-        tags$tr(
-          tags$td(tags$div("Sentimentlexikon", style="padding-right: 1.5em;")),
-          tags$td(
-            tags$div(
-              tagAppendAttributes(
-                shinyWidgets::pickerInput(
-                  inputId="senti_dict",
-                  label=NULL,
-                  choices=c("SentiWS", "German Polarity Clues"),
-                )
-              ),
-              `data-bs-target`="none"
+      card(
+        HTML(as.character(
+          tagAppendAttributes(
+            shinyWidgets::pickerInput(
+              inputId="senti_dict",
+              label="Sentimentlexikon",
+              choices=c("SentiWS", "German Polarity Clues"),
             )
           )
+        )),
+        gt::gt_output(outputId="senti_dict_tbl"),
+        HTML(
+          # https://tilemill-project.github.io/tilemill/docs/guides/advanced-legends/
+          "<div class='my-legend'>",
+          "  <div class='legend-title'>Sentimentwert</div>",
+          "  <div class='legend-scale'>",
+          "    <ul class='legend-labels'>",
+          "      <li><span class='sen-neg-max'></span>negativ</li>",
+          "      <li><span class='sen-neg-med'></span></li>",
+          "      <li><span class='sen-neg-min'></span></li>",
+          "      <li><span class='sen-neu'></span>neutral</li>",
+          "      <li><span class='sen-pos-min'></span></li>",
+          "      <li><span class='sen-pos-med'></span></li>",
+          "      <li><span class='sen-pos-max'></span>positiv</li>",
+          "    </ul>",
+          "  </div>",
+          "</div>"
         )
-      ))),
-      accordion(
-        accordion_panel(
-          title="",
-          gt::gt_output(outputId="senti_dict_tbl"),
-          HTML(
-            # https://tilemill-project.github.io/tilemill/docs/guides/advanced-legends/
-            "<div class='my-legend'>",
-            "  <div class='legend-title'>Sentimentwert</div>",
-            "  <div class='legend-scale'>",
-            "    <ul class='legend-labels'>",
-            "      <li><span class='sen-neg-max'></span>negativ</li>",
-            "      <li><span class='sen-neg-med'></span></li>",
-            "      <li><span class='sen-neg-min'></span></li>",
-            "      <li><span class='sen-neu'></span>neutral</li>",
-            "      <li><span class='sen-pos-min'></span></li>",
-            "      <li><span class='sen-pos-med'></span></li>",
-            "      <li><span class='sen-pos-max'></span>positiv</li>",
-            "    </ul>",
-            "  </div>",
-            "</div>"
-          )
-        ),
-        open=FALSE
       ),
       p_de("Dieses Verfahren ist relativ einfach zu implementieren und erfordert keine umfangreichen Trainingsdaten, was es besonders für kleine Unternehmen mit begrenzten Ressourcen attraktiv macht."),
       card(
@@ -155,7 +141,7 @@ main_content <- tags$div(
           column(
             tagAppendAttributes(
               shiny::textAreaInput(
-                inputId="sen_input", label="", value="", rows=5, resize="none",
+                inputId="sen_input-2", label="", value="", rows=5, resize="none",
                 width="100%"
               )
             ),
@@ -166,14 +152,14 @@ main_content <- tags$div(
           column(
             width=6,
             bslib::input_task_button(
-              id="sen_random", label="", icon=icon("dice"), label_busy="",
+              id="sen_random-2", label="", icon=icon("dice"), label_busy="",
               icon_busy=icon("dice"), style="--bs-btn-padding-y: .35em;"
             )
           ),
           column(
             width=6,
             bslib::input_task_button(
-              id="sen_add", label="", icon=icon("plus"), label_busy="",
+              id="sen_add-2", label="", icon=icon("plus"), label_busy="",
               icon_busy=icon("plus"), style="--bs-btn-padding-y: .35em;"
             )
           )
@@ -183,7 +169,7 @@ main_content <- tags$div(
       id="item-1-2"
     ),
     id="item-1",
-  ),
+  )
 )
 
 page_fillable(

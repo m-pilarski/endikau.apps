@@ -85,18 +85,18 @@ function(input, output, session) {
   })
 
   observeEvent(
-    input$sen_random, {
+    input$`sen_random-1`, {
       updateTextInput(
-        session=session, inputId="sen_input",
+        session=session, inputId="sen_input-1",
         value=random_review()
       )
     }
   )
 
   observeEvent(
-    input$sen_add, {
-      vals$sen_vec <- c(input$sen_input, vals$sen_vec)
-      updateTextInput(session=session, inputId="sen_input", value="")
+    input$`sen_add-1`, {
+      vals$sen_vec <- c(input$`sen_input-1`, vals$sen_vec)
+      updateTextInput(session=session, inputId="sen_input-1", value="")
     }
   )
 
@@ -106,7 +106,7 @@ function(input, output, session) {
 
   .doc_sentiment_tbl_rct <- reactive(
     vns::calc_doc_tok_sentidict_tbl(
-      .doc_vec=vals$sen_vec, .sentidict_tbl=vals$senti_dict_tbl
+      .doc_vec=first(vals$sen_vec), .sentidict_tbl=vals$senti_dict_tbl
     )
   )
 
@@ -121,7 +121,11 @@ function(input, output, session) {
 
   observe({
     updateTextInput(
-      session=session, inputId="sen_input",
+      session=session, inputId="sen_input-1",
+      value=vals$sen_vec[[1]]
+    )
+    updateTextInput(
+      session=session, inputId="sen_input-2",
       value=vals$sen_vec[[1]]
     )
   })

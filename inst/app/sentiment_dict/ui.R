@@ -17,9 +17,8 @@ theme <- bs_add_rules(
   sass::sass_file(system.file("app", "custom.scss", package="endikau.apps"))
 )
 
-page_sidebar(
-  withMathJax(),
-  sidebar=HTML(paste0(
+toc_content <- tags$div(
+  HTML(paste0(
     "<nav id='navbar-sentiment' class='h-100 flex-column align-items-stretch pe-4 border-end'>",
     "  <nav class='nav nav-pills flex-column'>",
     "    <a class='nav-link' href='#item-1'>Sentimentanalyse</a>",
@@ -30,6 +29,10 @@ page_sidebar(
     "  </nav>",
     "</nav>"
   )),
+  width="300px"
+)
+
+main_content <- tags$div(
   tags$div(
     tags$h2("Sentimentanalyse"),
     tags$div(
@@ -41,7 +44,6 @@ page_sidebar(
       tags$h3("Lexikonbasierte Senitmentanalyse"),
       p_de("Die lexikonbasierte Sentimentanalyse ist eine Methode, bei der vorab definierte Wörterlisten, sogenannte Sentimentlexika, verwendet werden, um die Stimmung eines Textes zu bestimmen. Diese Lexika enthalten Wörter, die mit positiven oder negativen Gefühlen assoziiert sind, oft mit einem entsprechenden Gewicht, das die Stärke des Ausdrucks angibt."),
       card(
-        # height="200px",
         fluidRow(
           column(
             tagAppendAttributes(
@@ -49,7 +51,6 @@ page_sidebar(
                 inputId="sen_input", label="", value="", rows=5, resize="none",
                 width="100%"
               ),
-              # style="font-size: var(--bs-body-font-size);"
             ),
             width=12
           )
@@ -58,7 +59,7 @@ page_sidebar(
           column(
             width=6,
             bslib::input_task_button(
-              id="sen_random", class="block", label="Produktbewertung",
+              id="sen_random", class="block", label="Beispieltext",
               icon=icon("dice"), label_busy="",
               icon_busy=tags$i(
                 class="fa-solid fa-sync fa-spin", role="presentation"
@@ -99,8 +100,8 @@ page_sidebar(
                   label=NULL,
                   choices=c("SentiWS", "German Polarity Clues"),
                 )
-              ) # ,
-              # `data-bs-target`="none"
+              ),
+              `data-bs-target`="none"
             )
           )
         )
@@ -124,64 +125,12 @@ page_sidebar(
             "      <li><span class='sen-pos-max'></span>positiv</li>",
             "    </ul>",
             "  </div>",
-            # "  <div class='legend-source'>",
-            # "    Source: <a href='#link to source'>ref...</a>",
-            # "  </div>",
             "</div>"
           )
         ),
         open=FALSE
       ),
-      # card(
-      #   card_title("Sentimentlexika"),
-      #   fluidRow(
-      #     # column(
-      #     #   width=6,
-      #     #   shinyWidgets::pickerInput(
-      #     #     inputId="senti_dict",
-      #     #     label="Sentimentlexicon",
-      #     #     choices=c("SentiWS", "German Polarity Clues")
-      #     #   ),
-      #     #   tags$div(stringi::stri_rand_lipsum(n_paragraphs=1))
-      #     # ),
-      #     column(
-      #       width=6,
-      #       gt::gt_output(outputId="senti_dict_tbl"),
-      #       HTML(
-      #         # https://tilemill-project.github.io/tilemill/docs/guides/advanced-legends/
-      #         "<div class='my-legend'>",
-      #         "  <div class='legend-title'>Sentimentwert</div>",
-      #         "  <div class='legend-scale'>",
-      #         "    <ul class='legend-labels'>",
-      #         "      <li><span class='sen-neg-max'></span>negativ</li>",
-      #         "      <li><span class='sen-neg-med'></span></li>",
-      #         "      <li><span class='sen-neg-min'></span></li>",
-      #         "      <li><span class='sen-neu'></span>neutral</li>",
-      #         "      <li><span class='sen-pos-min'></span></li>",
-      #         "      <li><span class='sen-pos-med'></span></li>",
-      #         "      <li><span class='sen-pos-max'></span>positiv</li>",
-      #         "    </ul>",
-      #         "  </div>",
-      #         # "  <div class='legend-source'>",
-      #         # "    Source: <a href='#link to source'>ref...</a>",
-      #         # "  </div>",
-      #         "</div>"
-      #       )
-      #     )
-      #   ),
-      #   fill=FALSE
-      # ),
       p_de("Dieses Verfahren ist relativ einfach zu implementieren und erfordert keine umfangreichen Trainingsdaten, was es besonders für kleine Unternehmen mit begrenzten Ressourcen attraktiv macht."),
-      # card(
-      #   card_title("Hier ausprobieren"),
-      #   fluidRow(
-      #     column(
-      #       width=12,
-      #       uiOutput(outputId="accordion")
-      #     )
-      #   ),
-      #   fill=FALSE
-      # ),
       card(
         fluidRow(
           column(
@@ -235,11 +184,21 @@ page_sidebar(
     ),
     id="item-1",
   ),
-  theme=theme,
-  `data-bs-spy`="scroll",
-  `data-bs-target`="#navbar-sentiment",
-  `data-bs-smooth-scroll`="true",
-  tabindex="0"
 )
+
+page_fillable(
+  layout_sidebar(
+    sidebar=sidebar(toc_content, open=list(desktop="always", mobile="closed")),
+    main_content,
+    # style="height: 100%;",
+    `data-bs-spy`="scroll",
+    `data-bs-target`="#navbar-sentiment",
+    `data-bs-smooth-scroll`="true",
+    tabindex="0"
+  ),
+  padding = 0, gap = 0,
+  theme=theme
+)
+
 
 

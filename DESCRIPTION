@@ -13,6 +13,7 @@ Imports:
     gt,
     klartext,
     shiny,
+    shinycssloaders,
     shinyWidgets,
     vns
 Remotes: 

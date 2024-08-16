@@ -101,7 +101,7 @@ function(input, output, session) {
   )
 
   .doc_parse_spacy_tbl_rct <- reactive(
-    vns::parse_doc_spacy(.doc_str=vals$sen_vec)
+    vns::parse_doc_spacy(.doc_str=first(vals$sen_vec))
   )
 
   .doc_sentidict_tbl_rct <- reactive(
@@ -132,7 +132,7 @@ function(input, output, session) {
 
   output$parse_spacy_table <- gt::render_gt({
 
-    .table_data <- .doc_parse_spacy_tbl_rct()
+    .table_data <- .doc_parse_spacy_tbl_rct() |> slice_min(doc_id, n=1)
 
     if(nrow(.table_data) == 0){
       NULL
@@ -240,7 +240,7 @@ function(input, output, session) {
     .doc_sentidict_tbl_rct() |>
       slice_min(doc_id, n=1, with_ties=TRUE) |>
       mutate(
-        tok_pol_col = tok_pol_lab |> case_match(
+        tok_pol_col = tok_pol_lab |> as.character() |> case_match(
           "sen-pos-max"~"#009392",
           "sen-pos-med"~"#39b185",
           "sen-pos-min"~"#9ccb86",

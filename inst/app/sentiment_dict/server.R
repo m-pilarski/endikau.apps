@@ -13,16 +13,16 @@ function(input, output, session) {
   vals <- reactiveValues(
     sen_vec = example_review,
     # sen_vec = c("ich mag das nicht", "das gefällt mir"),
-    senti_dict_tbl = endikau.data::sentiws_tbl
+    sentidict_tbl = endikau.data::sentiws_tbl
   )
 
   observeEvent(
-    input$senti_dict, {
-      if(input$senti_dict == "SentiWS"){
-        vals$senti_dict_tbl <- endikau.data::sentiws_tbl
+    input$sentidict, {
+      if(input$sentidict == "SentiWS"){
+        vals$sentidict_tbl <- endikau.data::sentiws_tbl
       }
-      if(input$senti_dict == "German Polarity Clues"){
-        vals$senti_dict_tbl <- endikau.data::gerpolclu_tbl
+      if(input$sentidict == "German Polarity Clues"){
+        vals$sentidict_tbl <- endikau.data::gerpolclu_tbl
       }
     }
   )
@@ -30,7 +30,7 @@ function(input, output, session) {
   output$accordion <- renderUI({
 
     .accordion_tbl <-
-      .doc_sentiment_tbl_rct() |>
+      .doc_sentidict_tbl_rct() |>
       dplyr::summarize(
         doc_text_html = stringi::stri_c(
           stringi::stri_c(
@@ -104,9 +104,9 @@ function(input, output, session) {
     vns::parse_doc_spacy(.doc_str=vals$sen_vec)
   )
 
-  .doc_sentiment_tbl_rct <- reactive(
+  .doc_sentidict_tbl_rct <- reactive(
     vns::calc_doc_tok_sentidict_tbl(
-      .doc_vec=first(vals$sen_vec), .sentidict_tbl=vals$senti_dict_tbl
+      .doc_vec=first(vals$sen_vec), .sentidict_tbl=vals$sentidict_tbl
     )
   )
 
@@ -157,21 +157,21 @@ function(input, output, session) {
         gt::tab_options(column_labels.hidden=TRUE) # |>
         # gt::cols_label(
         #   doc_text_html = "Text",
-        #   doc_pol_norm = "Sentimentwert"
+        #   doc_pol_norm = "sentidictwert"
         # )
 
     }
   })
 
-  output$sentiment_table <- gt::render_gt({
+  output$sentidict_table <- gt::render_gt({
 
-    .table_data <- .doc_sentiment_tbl_rct()
+    .table_data <- .doc_sentidict_tbl_rct()
 
     if(nrow(.table_data) == 0){
       NULL
     }else{
 
-    .doc_sentiment_tbl_rct() |>
+    .doc_sentidict_tbl_rct() |>
       dplyr::summarize(
         doc_text_html = stringi::stri_c(
           stringi::stri_c(
@@ -190,7 +190,7 @@ function(input, output, session) {
       gt::cols_label(
         doc_text_html = "Text",
         # doc_word_count = "Wortanzahl",
-        doc_pol_norm = "Sentimentwert"
+        doc_pol_norm = "sentidictwert"
       ) |>
       gt::text_transform(
         locations=gt::cells_body(columns=tidyselect::ends_with("_html")),
@@ -221,8 +221,8 @@ function(input, output, session) {
     }
   })
 
-  output$sentiment_text <- renderText(
-    .doc_sentiment_tbl_rct() |>
+  output$sentidict_text <- renderText(
+    .doc_sentidict_tbl_rct() |>
       slice_min(doc_id, n=1) |>
       mutate(across(where(is.factor), as.character)) |>
       purrr::transpose() |>
@@ -236,24 +236,62 @@ function(input, output, session) {
       stringi::stri_c(collapse="")
   )
 
-  output$senti_dict_tbl <- gt::render_gt({
-    .senti_dict_smpl_tbl <<-
-      vals$senti_dict_tbl |>
+  output$sentidict_score <- renderText({
+    .doc_sentidict_tbl_rct() |>
+      slice_min(doc_id, n=1, with_ties=TRUE) |>
+      mutate(
+        tok_pol_col = tok_pol_lab |> case_match(
+          "sen-pos-max"~"#009392",
+          "sen-pos-med"~"#39b185",
+          "sen-pos-min"~"#9ccb86",
+          "sen-neu"~"#e9e29c",
+          "sen-neg-min"~"#eeb479",
+          "sen-neg-med"~"#e88471",
+          "sen-neg-max"~"#cf597e",
+          "sen-miss"~"#bababa"
+        )
+      ) |>
+      summarize(
+        tok_pol_sum_str = stringi::stri_c(
+          "$$ \\require{color}",
+          scales::label_number(accuracy=0.001)(sum(tok_pol_num)),
+          " = ",
+          stringi::stri_c(
+            stringi::stri_c(
+              "\\colorbox{", tok_pol_col[tok_pol_num != 0], "}{",
+              scales::label_number(accuracy=0.001)(tok_pol_num[tok_pol_num != 0]),
+              "}"
+            ),
+            collapse=" + "
+          ),
+          "$$"
+        )
+      ) |>
+      pull(tok_pol_sum_str) |>
+      (\(.x){print(.x); .x})() |>
+      tags$span() |>
+      withMathJax() |>
+      as.character()
+  })
+
+  output$sentidict_tbl <- gt::render_gt({
+    .sentidict_smpl_tbl <<-
+      vals$sentidict_tbl |>
       dplyr::slice_sample(n=10) |>
       dplyr::arrange(tok_pol_num)
 
-    .senti_dict_smpl_gt <<-
-      .senti_dict_smpl_tbl |>
+    .sentidict_smpl_gt <<-
+      .sentidict_smpl_tbl |>
       dplyr::slice_sample(n=10) |>
       dplyr::arrange(tok_pol_num) |>
       gt::gt()
 
-    .senti_dict_smpl_tbl |>
+    .sentidict_smpl_tbl |>
       tibble::rowid_to_column() |>
       dplyr::group_by(tok_pol_lab) |>
       dplyr::group_walk(\(..gdata, ..gkeys){
-        .senti_dict_smpl_gt <<-
-          .senti_dict_smpl_gt |>
+        .sentidict_smpl_gt <<-
+          .sentidict_smpl_gt |>
           gt::fmt(
             columns=tok_str,
             rows=..gdata$rowid,
@@ -266,7 +304,7 @@ function(input, output, session) {
           )
       })
 
-    .senti_dict_smpl_gt
+    .sentidict_smpl_gt
 
   })
 

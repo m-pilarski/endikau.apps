@@ -36,6 +36,48 @@ toc_content <- tags$div(
   width="300px"
 )
 
+input_content <- tags$div(
+  tagAppendAttributes(
+    shiny::textAreaInput(
+      label="Beispieltext", inputId="sen_input-1", value="", rows=10,
+      resize="none", width="100%"
+    ),
+    spellcheck="false"
+  ),
+  fluidRow(
+    column(
+      width=12,
+      bslib::input_task_button(
+        id="sen_random-1", class="block", label="Vorschlagen",
+        icon=icon("dice"), label_busy="",
+        icon_busy=tags$i(
+          class="fa-solid fa-sync fa-spin", role="presentation"
+        )
+      )
+    ),
+    column(
+      width=12,
+      bslib::input_task_button(
+        id="sen_add-1", class="block", label="Analysieren",
+        icon=icon("calculator"), label_busy="",
+        icon_busy=tags$i(
+          class="fa-solid fa-sync fa-spin", role="presentation"
+        )
+      )
+    )
+  ),
+  HTML("<br>"),
+  fluidRow(
+    shinyWidgets::pickerInput(
+      inputId="sentidict",
+      label="Sentimentlexikon",
+      choices=c("SentiWS", "German Polarity Clues")
+    )
+  ) # ,
+  # HTML("<br>"),
+  # style="height: 100%;"
+)
+
 main_content <- tags$div(
   tags$div(
     tags$h2("Sentimentanalyse"),
@@ -149,39 +191,39 @@ main_content <- tags$div(
     tags$div(
       tags$h3("Machine-Learning-Basierte Sentimentanalyse"),
       p_de("Im Gegensatz zu lexikonbasierten Ansätzen bieten vortrainierte transformer-basierte Modelle, wie beispielsweise BERT (Bidirectional Encoder Representations from Transformers) und GPT (Generative Pre-trained Transformer), eine fortschrittliche Möglichkeit zur Sentimentanalyse. Diese Modelle sind auf großen Textkorpora vortrainiert und können kontextabhängige Bedeutungen erfassen, was ihnen ermöglicht, die Stimmung eines Textes mit hoher Genauigkeit zu bestimmen. Sie verwenden Mechanismen wie die Selbstaufmerksamkeit, um Beziehungen zwischen Wörtern im Text besser zu verstehen, selbst wenn diese weit voneinander entfernt sind. Dies erlaubt ihnen, subtile sprachliche Nuancen, Mehrdeutigkeiten und komplexe Sprachstrukturen zu erkennen und zu interpretieren. Ein wesentlicher Vorteil dieser Modelle ist ihre Fähigkeit, auch in unbekannten Domänen oder bei sarkastischen und ironischen Texten zuverlässige Ergebnisse zu liefern, da sie aus einer Vielzahl von Beispielen lernen. Darüber hinaus können sie ohne spezifische Lexika auskommen und sind durch Fine-Tuning flexibel an spezifische Anwendungsfälle anpassbar, was sie besonders leistungsstark und vielseitig macht."),
-      tags$div(
-        # card_title("Beispieltext"),
-        tagAppendAttributes(
-          shiny::textAreaInput(
-            label="Beispieltext", inputId="sen_input-278", value="", rows=5,
-            resize="none", width="100%"
-          ),
-        ),
-        fluidRow(
-          column(
-            width=6,
-            bslib::input_task_button(
-              id="sen_random-2", class="block", label="Vorschlagen",
-              icon=icon("dice"), label_busy="",
-              icon_busy=tags$i(
-                class="fa-solid fa-sync fa-spin", role="presentation"
-              ),
-            )
-          ),
-          column(
-            width=6,
-            bslib::input_task_button(
-              id="sen_add-2", class="block", label="Analysieren",
-              icon=icon("calculator"), label_busy="",
-              icon_busy=tags$i(
-                class="fa-solid fa-sync fa-spin", role="presentation"
-              ),
-            )
-          )
-        ),
-        HTML("<br>"),
-        style="max-height: 600px;"
-      ),
+      # tags$div(
+      #   # card_title("Beispieltext"),
+      #   tagAppendAttributes(
+      #     shiny::textAreaInput(
+      #       label="Beispieltext", inputId="sen_input-278", value="", rows=5,
+      #       resize="none", width="100%"
+      #     ),
+      #   ),
+      #   fluidRow(
+      #     column(
+      #       width=6,
+      #       bslib::input_task_button(
+      #         id="sen_random-2", class="block", label="Vorschlagen",
+      #         icon=icon("dice"), label_busy="",
+      #         icon_busy=tags$i(
+      #           class="fa-solid fa-sync fa-spin", role="presentation"
+      #         ),
+      #       )
+      #     ),
+      #     column(
+      #       width=6,
+      #       bslib::input_task_button(
+      #         id="sen_add-2", class="block", label="Analysieren",
+      #         icon=icon("calculator"), label_busy="",
+      #         icon_busy=tags$i(
+      #           class="fa-solid fa-sync fa-spin", role="presentation"
+      #         ),
+      #       )
+      #     )
+      #   ),
+      #   HTML("<br>"),
+      #   style="max-height: 600px;"
+      # ),
       tags$div(
         tags$h4("Berechnung"),
         tags$div(
@@ -191,87 +233,43 @@ main_content <- tags$div(
         HTML("<br>"),
         id="item-1-2-1"
       ),
-      tags$div("$$\\require{color}\\colorbox{#009392}{ 0.501} + \\colorbox{#cf597e}{-0.608}$$"),
       id="item-1-2"
     ),
     id="item-1",
     style="min-width=600px;"
-  ),
-  tabindex="0",
-  `data-bs-spy`="scroll",
-  `data-bs-target`="#navbar-sentiment",
-  `data-bs-smooth-scroll`="true"
+  )
 )
 
 page_fillable(
   withMathJax(),
   shinyjs::useShinyjs(),
   layout_sidebar(
-    sidebar=sidebar(
-      tags$div(
-        tagAppendAttributes(
-          shiny::textAreaInput(
-            label="Beispieltext", inputId="sen_input-1", value="", rows=10,
-            resize="none", width="100%"
-          ),
-          spellcheck="false"
-        ),
-        fluidRow(
-          column(
-            width=12,
-            bslib::input_task_button(
-              id="sen_random-1", class="block", label="Vorschlagen",
-              icon=icon("dice"), label_busy="",
-              icon_busy=tags$i(
-                class="fa-solid fa-sync fa-spin", role="presentation"
-              )
-            )
-          ),
-          column(
-            width=12,
-            bslib::input_task_button(
-              id="sen_add-1", class="block", label="Analysieren",
-              icon=icon("calculator"), label_busy="",
-              icon_busy=tags$i(
-                class="fa-solid fa-sync fa-spin", role="presentation"
-              )
-            )
-          )
-        ),
-        HTML("<br>"),
-        fluidRow(
-          shinyWidgets::pickerInput(
-            inputId="sentidict",
-            label="Sentimentlexikon",
-            choices=c("SentiWS", "German Polarity Clues")
-          )
-        ) # ,
-        # HTML("<br>"),
-        # style="height: 100%;"
-      ),
-      width="300px"
-    ),
+    sidebar=sidebar(input_content, width="300px", position="left"),
     layout_sidebar(
       sidebar=sidebar(toc_content, open=list(desktop="always", mobile="closed"), position="right"),
-      main_content,
+      tags$div(main_content, style="padding-left: 15px; padding-right: 15px"),
       fill=TRUE,
       fillable=FALSE,
       padding=0,
-      gap=0
+      gap=0,
+      tabindex="0",
+      `data-bs-spy`="scroll",
+      `data-bs-target`="#navbar-sentiment",
+      `data-bs-smooth-scroll`="true"
     ),
     fill=TRUE,
     fillable=TRUE,
     padding=0,
     gap=0
   ),
-  tags$footer(
-    tags$script(paste0(
-      "$('[data-spy=\"scroll\"]').scrollspy('process');",
-      "$('[data-spy=\"scroll\"]').on('activate.bs.scrollspy', function () {",
-      "  var $spy = $(this).scrollspy('process')",
-      "})"
-    ))
-  ),
+  # tags$footer(
+  #   tags$script(paste0(
+  #     "$('[data-spy=\"scroll\"]').scrollspy('process');",
+  #     "$('[data-spy=\"scroll\"]').on('activate.bs.scrollspy', function () {",
+  #     "  var $spy = $(this).scrollspy('process')",
+  #     "})"
+  #   ))
+  # ),
   title="sentiment app", lang="de", padding=0, gap=0, theme=theme
 )# |> as.character()
 

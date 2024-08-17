@@ -110,6 +110,12 @@ function(input, output, session) {
     )
   )
 
+  .doc_germansentiment_tbl_rct <- reactive(
+    calc_doc_germansentiment_tbl_memo_each(
+      .doc_str=first(vals$sen_vec)
+    )
+  )
+
   observeEvent(input$delete_row, {
     idx <- as.integer(
       stringi::stri_extract_first_regex(
@@ -259,19 +265,43 @@ function(input, output, session) {
           stringi::stri_c(
             stringi::stri_c(
               "\\colorbox{", tok_pol_col[tok_pol_num != 0], "}{",
-              scales::label_number(accuracy=0.001)(tok_pol_num[tok_pol_num != 0]),
+              tok_pol_num[tok_pol_num != 0] |>
+                scales::label_number(accuracy=0.001, style_positive="plus", style_negative="minus")() |>
+                purrr::modify_at(1, stringi::stri_replace_first_fixed, "+", ""),
               "}"
             ),
-            collapse=" + "
+            collapse=""
           ),
           "$$"
-        )
+        ) |> stringi::stri_replace_all_regex("([+−])(\\d)", "$1 $2")
       ) |>
       pull(tok_pol_sum_str) |>
       (\(.x){print(.x); .x})() |>
       tags$span() |>
       withMathJax() |>
       as.character()
+  })
+
+  output$germansentiment_score <- renderText({
+    .doc_germansentiment_tbl_rct() |>
+      slice_head(n=1) |>
+      mutate(
+        doc_class_lab =
+          doc_class_lab |>
+          case_match(
+            "positive"~"<span class='sen-pos-med bubble'> Positive",
+            "neutral"~"<span class='sen-neu bubble'> Neutrale",
+            "negative"~"<span class='sen-neg-med bubble'> Negative"
+          ) |>
+          stringi::stri_c("Stimmung</span> ", sep=" ")
+      ) |>
+      summarize(
+        class_prob_str = stringi::stri_c(
+          doc_class_lab, " mit einer Wahrscheinlichkeit von ",
+          scales::label_percent()(doc_class_prob)
+        )
+      ) |>
+      pull(class_prob_str)
   })
 
   output$sentidict_tbl <- gt::render_gt({
@@ -306,6 +336,17 @@ function(input, output, session) {
 
     .sentidict_smpl_gt
 
+  })
+
+  timer <- reactive({
+    # invalidate 1 minute later
+    invalidateLater(1000 * 5)
+    shinyjs::runjs(paste0(
+      "$('[data-spy=\"scroll\"]').each(function () {",
+      "  var $spy = $(this).scrollspy('refresh')",
+      "})"
+    ))
+    message("adjusted scrollspy")
   })
 
 }

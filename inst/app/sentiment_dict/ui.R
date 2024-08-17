@@ -5,10 +5,11 @@ library(bslib)
 
 theme <- bs_add_rules(
   bs_theme(
+    version="5",
     base_font=font_google("Source Serif 4"),
     code_font=font_google("IBM Plex Mono"),
     heading_font=font_google("Bebas Neue", wght=400),
-    font_scale=1.25
+    # font_scale=1.25
     # preset=c(builtin_themes(), bootswatch_themes())[4]
   ),
   sass::sass_file(system.file("app", "custom.scss", package="endikau.apps"))
@@ -46,37 +47,36 @@ main_content <- tags$div(
     tags$div(
       tags$h3("Lexikonbasierte Senitmentanalyse"),
       p_de("Die lexikonbasierte Sentimentanalyse ist eine Methode, bei der vorab definierte Wörterlisten, sogenannte Sentimentlexika, verwendet werden, um die Stimmung eines Textes zu bestimmen. Diese Lexika enthalten Wörter, die mit positiven oder negativen Gefühlen assoziiert sind, oft mit einem entsprechenden Gewicht, das die Stärke des Ausdrucks angibt."),
-      tags$div(
-        # card_title("Beispieltext"),
-        shiny::textAreaInput(
-          label="Beispieltext", inputId="sen_input-1", value="", rows=5,
-          resize="none", width="100%"
-        ),
-        fluidRow(
-          column(
-            width=6,
-            bslib::input_task_button(
-              id="sen_random-1", class="block", label="Vorschlagen",
-              icon=icon("dice"), label_busy="",
-              icon_busy=tags$i(
-                class="fa-solid fa-sync fa-spin", role="presentation"
-              )
-            )
-          ),
-          column(
-            width=6,
-            bslib::input_task_button(
-              id="sen_add-1", class="block", label="Analysieren",
-              icon=icon("calculator"), label_busy="",
-              icon_busy=tags$i(
-                class="fa-solid fa-sync fa-spin", role="presentation"
-              )
-            )
-          )
-        ),
-        HTML("<br>"),
-        style="max-height: 600px;"
-      ),
+      # tags$div(
+      #   shiny::textAreaInput(
+      #     label="Beispieltext", inputId="sen_input-1", value="", rows=5,
+      #     resize="none", width="100%"
+      #   ),
+      #   fluidRow(
+      #     column(
+      #       width=6,
+      #       bslib::input_task_button(
+      #         id="sen_random-1", class="block", label="Vorschlagen",
+      #         icon=icon("dice"), label_busy="",
+      #         icon_busy=tags$i(
+      #           class="fa-solid fa-sync fa-spin", role="presentation"
+      #         )
+      #       )
+      #     ),
+      #     column(
+      #       width=6,
+      #       bslib::input_task_button(
+      #         id="sen_add-1", class="block", label="Analysieren",
+      #         icon=icon("calculator"), label_busy="",
+      #         icon_busy=tags$i(
+      #           class="fa-solid fa-sync fa-spin", role="presentation"
+      #         )
+      #       )
+      #     )
+      #   ),
+      #   HTML("<br>")
+      # ),
+      tags$br(),
       tags$div(
         tags$h4("Textaufbereitung"),
         p_de("Der Prozess beginnt mit der Aufbereitung der Textdaten, die sowohl verschieden Schritter der Normalisierung als auch die Tokenisierung umfasst, um den Text in eine verarbeitbare Form zu bringen."),
@@ -94,13 +94,6 @@ main_content <- tags$div(
         tags$h4("Sentimentlexikon"),
         p_de("Anschließend werden die Wörter des Textes mit den Einträgen im Lexikons (bspw. SentiWS oder German Polarity Clues) abgeglichen."),
         tags$div(
-          fluidRow(
-            shinyWidgets::pickerInput(
-              inputId="sentidict",
-              label="Sentimentlexikon",
-              choices=c("SentiWS", "German Polarity Clues")
-            )
-          ),
           fluidRow(
             gt::gt_output(outputId="sentidict_tbl"),
             HTML(
@@ -128,17 +121,18 @@ main_content <- tags$div(
       ),
       tags$div(
         tags$h4("Berechnung"),
-        p_de(" Die aggregierten Gewichte der Wörter aus dem Lexikon geben schließlich die Gesamtstimmung des Textes wieder."),
+        p_de("Die aggregierten Gewichte der Wörter aus dem Lexikon geben schließlich die Gesamtstimmung des Textes wieder."),
+        tags$br(),
         tags$div(
           fluidRow(uiOutput(outputId="sentidict_text")),
           style="max-height: 800px; width: 100%;"
         ),
-        HTML("<br>"),
+        tags$br(),
         tags$div(
           fluidRow(uiOutput(outputId="sentidict_score")),
           style="max-height: 800px; width: 100%;"
         ),
-        HTML("<br>"),
+        tags$br(),
         id="item-1-1-3"
       ),
       tags$div(
@@ -188,34 +182,98 @@ main_content <- tags$div(
         HTML("<br>"),
         style="max-height: 600px;"
       ),
+      tags$div(
+        tags$h4("Berechnung"),
+        tags$div(
+          fluidRow(uiOutput(outputId="germansentiment_score")),
+          style="max-height: 300px; width: 100%;"
+        ),
+        HTML("<br>"),
+        id="item-1-2-1"
+      ),
       tags$div("$$\\require{color}\\colorbox{#009392}{ 0.501} + \\colorbox{#cf597e}{-0.608}$$"),
       id="item-1-2"
     ),
-    id="item-1"
-  )
+    id="item-1",
+    style="min-width=600px;"
+  ),
+  tabindex="0",
+  `data-bs-spy`="scroll",
+  `data-bs-target`="#navbar-sentiment",
+  `data-bs-smooth-scroll`="true"
 )
 
 page_fillable(
-  # tags$head(
-  #   tags$title("colorbox"),
-  #   tags$meta(`http-equiv`="Content-Type", content="text/html; charset=UTF-8"),
-  #   tags$script(
-  #     "MathJax.Hub.Config({ TeX: { extensions: ['color.js','autoload-all.js'] } });",
-  #     type="text/x-mathjax-config"
-  #   ),
-  #   tags$script(type="text/javascript", src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML")
-  # ),
   withMathJax(),
+  shinyjs::useShinyjs(),
   layout_sidebar(
-    sidebar=sidebar(toc_content, open=list(desktop="always", mobile="closed")),
-    tags$div(main_content),
-    tabindex="0",
-    `data-bs-spy`="scroll",
-    `data-bs-target`="#navbar-sentiment",
-    `data-bs-smooth-scroll`="true"
+    sidebar=sidebar(
+      tags$div(
+        tagAppendAttributes(
+          shiny::textAreaInput(
+            label="Beispieltext", inputId="sen_input-1", value="", rows=10,
+            resize="none", width="100%"
+          ),
+          spellcheck="false"
+        ),
+        fluidRow(
+          column(
+            width=12,
+            bslib::input_task_button(
+              id="sen_random-1", class="block", label="Vorschlagen",
+              icon=icon("dice"), label_busy="",
+              icon_busy=tags$i(
+                class="fa-solid fa-sync fa-spin", role="presentation"
+              )
+            )
+          ),
+          column(
+            width=12,
+            bslib::input_task_button(
+              id="sen_add-1", class="block", label="Analysieren",
+              icon=icon("calculator"), label_busy="",
+              icon_busy=tags$i(
+                class="fa-solid fa-sync fa-spin", role="presentation"
+              )
+            )
+          )
+        ),
+        HTML("<br>"),
+        fluidRow(
+          shinyWidgets::pickerInput(
+            inputId="sentidict",
+            label="Sentimentlexikon",
+            choices=c("SentiWS", "German Polarity Clues")
+          )
+        ) # ,
+        # HTML("<br>"),
+        # style="height: 100%;"
+      ),
+      width="300px"
+    ),
+    layout_sidebar(
+      sidebar=sidebar(toc_content, open=list(desktop="always", mobile="closed"), position="right"),
+      main_content,
+      fill=TRUE,
+      fillable=FALSE,
+      padding=0,
+      gap=0
+    ),
+    fill=TRUE,
+    fillable=TRUE,
+    padding=0,
+    gap=0
+  ),
+  tags$footer(
+    tags$script(paste0(
+      "$('[data-spy=\"scroll\"]').scrollspy('process');",
+      "$('[data-spy=\"scroll\"]').on('activate.bs.scrollspy', function () {",
+      "  var $spy = $(this).scrollspy('process')",
+      "})"
+    ))
   ),
   title="sentiment app", lang="de", padding=0, gap=0, theme=theme
-)
+)# |> as.character()
 
 
 

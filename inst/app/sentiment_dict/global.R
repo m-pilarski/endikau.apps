@@ -3,17 +3,32 @@ library(stringi)
 
 `%||%` <- rlang::`%||%`
 
-vns::setup_vns_condaenv(.install_miniconda=TRUE, .create_condaenv=TRUE)
+shinyOptions(cache_pointer=cachem::cache_mem())
 
-vns::use_vns_condaenv()
+while(is(try(vns::use_vns_condaenv()), "try-error")){
+  vns::setup_vns_condaenv(.install_miniconda=TRUE, .create_condaenv=TRUE)
+}
 
 germansentiment_model <- vns::load_germansentiment_model()
+# spacy_model <- vns::load_spacy_model()
+
+# parse_doc_spacy_memo_full <- memoise::memoise(
+#   f=purrr::partial(.f=vns::parse_doc_spacy, .spacy_model=spacy_model),
+#   cache=getShinyOption("cache_pointer")
+# )
+#
+# parse_doc_spacy_memo_each <- function(.doc_str){
+#   purrr::map_dfr(.doc_str, \(..doc_str){
+#     parse_doc_spacy_memo_full(..doc_str)
+#   })
+# }
 
 calc_doc_germansentiment_tbl_memo_full <- memoise::memoise(
   f=purrr::partial(
     .f=vns::calc_doc_germansentiment_tbl,
     .germansentiment_model=germansentiment_model
-  )
+  ),
+  cache=getShinyOption("cache_pointer")
 )
 
 calc_doc_germansentiment_tbl_memo_each <- function(.doc_str){

@@ -4,10 +4,13 @@
 \alias{run_app_sentiment_dict}
 \title{run_app_sentiment_dict}
 \usage{
-run_app_sentiment_dict()
+run_app_sentiment_dict(.cache_pointer = NULL)
+}
+\arguments{
+\item{.cache_pointer}{a \code{cachem::cache_*} object}
 }
 \description{
-run_app_sentiment_dict
+FUNCTION_DESCRIPTION
 }
 \examples{
 1 + 1

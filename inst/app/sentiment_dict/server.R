@@ -27,62 +27,62 @@ function(input, output, session) {
     }
   )
 
-  output$accordion <- renderUI({
-
-    .accordion_tbl <-
-      .doc_sentidict_tbl_rct() |>
-      dplyr::summarize(
-        doc_text_html = stringi::stri_c(
-          stringi::stri_c(
-            "<span class='", tok_pol_lab, " bubble' data-toggle='tooltip' ",
-            "data-placement='top' title='", tok_pol_num, "'>",
-            tok_str_raw, "</span>"
-          ),
-          collapse=""
-        ),
-        doc_word_count = length(tok_str_raw),
-        doc_pol_norm = sum(tok_pol_num) / doc_word_count,
-        .by=doc_id
-      ) |>
-      mutate(
-        doc_panel = list(
-          accordion_panel(
-            title=HTML(stringi::stri_c(
-              "<table style='width:100%'><tr>",
-              "  <td width=80%>", doc_text_html, "</td>",
-              "  <td>",
-              scales::label_number(
-                accuracy=1e-3, drop0trailing=FALSE
-              )(doc_pol_norm),
-              "  </td>",
-              "  <td>",
-              as.character(shiny::actionButton(
-                inputId = paste0("delete_row", doc_id),
-                label=NULL,
-                icon=icon("trash-can"),
-                style="padding: 0; border: none; background: none;",
-                onclick=stringi::stri_c(
-                  "Shiny.setInputValue(",
-                  "  'delete_row', this.id, {priority: 'event'}",
-                  ")"
-                )
-              )),
-              "  </td>",
-              "<tr></table>"
-            )),
-            HTML(as.character(
-              withMathJax("$$a^2 + b^2 = c^2$$")
-            #   # stringi::stri_rand_lipsum(n_paragraphs=1),
-            #   # style="font-size:1rem; --bs-body-font-size:1rem;"
-            ))
-          )
-        ),
-        .by=doc_id
-      )
-
-    HTML(as.character(accordion(!!!.accordion_tbl$doc_panel, multiple=FALSE)))
-
-  })
+  # output$accordion <- renderUI({
+  #
+  #   .accordion_tbl <-
+  #     .doc_sentidict_tbl_rct() |>
+  #     dplyr::summarize(
+  #       doc_text_html = stringi::stri_c(
+  #         stringi::stri_c(
+  #           "<span class='", tok_pol_lab, " bubble' data-toggle='tooltip' ",
+  #           "data-placement='top' title='", tok_pol_num, "'>",
+  #           tok_str_raw, "</span>"
+  #         ),
+  #         collapse=""
+  #       ),
+  #       doc_word_count = length(tok_str_raw),
+  #       doc_pol_norm = sum(tok_pol_num) / doc_word_count,
+  #       .by=doc_id
+  #     ) |>
+  #     mutate(
+  #       doc_panel = list(
+  #         accordion_panel(
+  #           title=HTML(stringi::stri_c(
+  #             "<table style='width:100%'><tr>",
+  #             "  <td width=80%>", doc_text_html, "</td>",
+  #             "  <td>",
+  #             scales::label_number(
+  #               accuracy=1e-3, drop0trailing=FALSE
+  #             )(doc_pol_norm),
+  #             "  </td>",
+  #             "  <td>",
+  #             as.character(shiny::actionButton(
+  #               inputId = paste0("delete_row", doc_id),
+  #               label=NULL,
+  #               icon=icon("trash-can"),
+  #               style="padding: 0; border: none; background: none;",
+  #               onclick=stringi::stri_c(
+  #                 "Shiny.setInputValue(",
+  #                 "  'delete_row', this.id, {priority: 'event'}",
+  #                 ")"
+  #               )
+  #             )),
+  #             "  </td>",
+  #             "<tr></table>"
+  #           )),
+  #           HTML(as.character(
+  #             withMathJax("$$a^2 + b^2 = c^2$$")
+  #           #   # stringi::stri_rand_lipsum(n_paragraphs=1),
+  #           #   # style="font-size:1rem; --bs-body-font-size:1rem;"
+  #           ))
+  #         )
+  #       ),
+  #       .by=doc_id
+  #     )
+  #
+  #   HTML(as.character(accordion(!!!.accordion_tbl$doc_panel, multiple=FALSE)))
+  #
+  # })
 
   observeEvent(
     input$`sen_random-1`, {
@@ -100,13 +100,13 @@ function(input, output, session) {
     }
   )
 
-  .doc_parse_spacy_tbl_rct <- reactive(
-    vns::parse_doc_spacy(.doc_str=first(vals$sen_vec))
+  .doc_parse_tbl_rct <- reactive(
+    vns::parse_doc_simple(.doc_str=first(vals$sen_vec))
   )
 
   .doc_sentidict_tbl_rct <- reactive(
-    vns::calc_doc_tok_sentidict_tbl(
-      .doc_vec=first(vals$sen_vec), .sentidict_tbl=vals$sentidict_tbl
+    vns::calc_tok_sentidict_tbl(
+      .doc_str=first(vals$sen_vec), .sentidict_tbl=vals$sentidict_tbl
     )
   )
 
@@ -136,38 +136,67 @@ function(input, output, session) {
     )
   })
 
-  output$parse_spacy_table <- gt::render_gt({
+  # output$parse_spacy_table <- gt::render_gt({
+  #
+  #   .table_data <- .doc_parse_spacy_tbl_rct() |> slice_min(doc_id, n=1)
+  #
+  #   if(nrow(.table_data) == 0){
+  #     NULL
+  #   }else{
+  #     .table_data |>
+  #       mutate(across(everything(), as.character)) |>
+  #       relocate(tok_str, .before=0) |>
+  #       tibble::rowid_to_column("rowid") |>
+  #       tibble::column_to_rownames("rowid") |>
+  #       as.matrix() |>
+  #       t() |>
+  #       tibble::as_tibble(rownames="feature") |>
+  #       gt::gt() |>
+  #       gt::tab_style(
+  #         style = list(
+  #           # gt::cell_fill(color = "#bababa"),
+  #           gt::cell_borders(color="#bababa"),
+  #           gt::cell_text(weight = "bold")
+  #         ),
+  #         locations = gt::cells_body(rows=1)
+  #       ) |>
+  #       gt::tab_options(column_labels.hidden=TRUE) # |>
+  #       # gt::cols_label(
+  #       #   doc_text_html = "Text",
+  #       #   doc_pol_norm = "sentidictwert"
+  #       # )
+  #
+  #   }
+  # })
 
-    .table_data <- .doc_parse_spacy_tbl_rct() |> slice_min(doc_id, n=1)
-
-    if(nrow(.table_data) == 0){
-      NULL
-    }else{
-      .table_data |>
-        mutate(across(everything(), as.character)) |>
-        relocate(tok_str, .before=0) |>
-        tibble::rowid_to_column("rowid") |>
-        tibble::column_to_rownames("rowid") |>
-        as.matrix() |>
-        t() |>
-        tibble::as_tibble(rownames="feature") |>
-        gt::gt() |>
-        gt::tab_style(
-          style = list(
-            # gt::cell_fill(color = "#bababa"),
-            gt::cell_borders(color="#bababa"),
-            gt::cell_text(weight = "bold")
-          ),
-          locations = gt::cells_body(rows=1)
-        ) |>
-        gt::tab_options(column_labels.hidden=TRUE) # |>
-        # gt::cols_label(
-        #   doc_text_html = "Text",
-        #   doc_pol_norm = "sentidictwert"
-        # )
-
-    }
-  })
+  # output$parse_text <- renderText({
+  #
+  #   .table_data <- .doc_parse_tbl_rct() |> slice_min(doc_id, n=1)
+  #
+  #   if(nrow(.table_data) == 0){
+  #     NULL
+  #   }else{
+  #     .table_data |>
+  #       pull(tok_str)
+  #       mutate(across(everything(), as.character)) |>
+  #       relocate(tok_str, .before=0) |>
+  #       tibble::rowid_to_column("rowid") |>
+  #       tibble::column_to_rownames("rowid") |>
+  #       as.matrix() |>
+  #       t() |>
+  #       tibble::as_tibble(rownames="feature") |>
+  #       gt::gt() |>
+  #       gt::tab_style(
+  #         style = list(
+  #           # gt::cell_fill(color = "#bababa"),
+  #           gt::cell_borders(color="#bababa"),
+  #           gt::cell_text(weight = "bold")
+  #         ),
+  #         locations = gt::cells_body(rows=1)
+  #       ) |>
+  #       gt::tab_options(column_labels.hidden=TRUE)
+  #   }
+  # })
 
   output$sentidict_table <- gt::render_gt({
 
@@ -236,7 +265,7 @@ function(input, output, session) {
         stringi::stri_c(
           "<span class='", .tok_data$tok_pol_lab, " bubble' data-toggle='tooltip' ",
           "data-placement='top' title='", .tok_data$tok_pol_num, "'>",
-          .tok_data$tok_str_raw, "</span>"
+          .tok_data$tok_str, "</span>"
         )
       }) |>
       stringi::stri_c(collapse="")
@@ -266,8 +295,8 @@ function(input, output, session) {
             stringi::stri_c(
               "\\colorbox{", tok_pol_col[tok_pol_num != 0], "}{",
               tok_pol_num[tok_pol_num != 0] |>
-                scales::label_number(accuracy=0.001, style_positive="plus", style_negative="minus")() |>
-                purrr::modify_at(1, stringi::stri_replace_first_fixed, "+", ""),
+                scales::label_number(accuracy=0.001, style_positive="plus", style_negative="minus")(), # |>
+                # purrr::modify_at(1, stringi::stri_replace_first_fixed, "+", ""),
               "}"
             ),
             collapse=""
@@ -276,7 +305,6 @@ function(input, output, session) {
         ) |> stringi::stri_replace_all_regex("([+−])(\\d)", "$1 $2")
       ) |>
       pull(tok_pol_sum_str) |>
-      (\(.x){print(.x); .x})() |>
       tags$span() |>
       withMathJax() |>
       as.character()

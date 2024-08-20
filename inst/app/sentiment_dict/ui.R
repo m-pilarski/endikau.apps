@@ -8,8 +8,8 @@ theme <- bs_add_rules(
     version="5",
     base_font=font_google("Source Serif 4"),
     code_font=font_google("IBM Plex Mono"),
-    heading_font=font_google("Bebas Neue", wght=400),
-    # font_scale=1.25
+    heading_font=font_google("Bebas Neue"),
+    font_scale=1.25
     # preset=c(builtin_themes(), bootswatch_themes())[4]
   ),
   sass::sass_file(system.file("app", "custom.scss", package="endikau.apps"))
@@ -23,7 +23,7 @@ toc_content <- tags$div(
     "    <nav class='nav nav-pills flex-column'>",
     "      <a class='nav-link ms-2 my-1' href='#item-1-1'>Lexikonbasiert</a>",
     "      <nav class='nav nav-pills flex-column'>",
-    "        <a class='nav-link ms-4 my-1' href='#item-1-1-1'>Textaufbereitung</a>",
+    # "        <a class='nav-link ms-4 my-1' href='#item-1-1-1'>Textaufbereitung</a>",
     "        <a class='nav-link ms-4 my-1' href='#item-1-1-2'>Sentimentlexika</a>",
     "        <a class='nav-link ms-4 my-1' href='#item-1-1-3'>Berechnung</a>",
     "        <a class='nav-link ms-4 my-1' href='#item-1-1-4'>Kritik</a>",
@@ -88,7 +88,7 @@ main_content <- tags$div(
     ),
     tags$div(
       tags$h3("Lexikonbasierte Senitmentanalyse"),
-      p_de("Die lexikonbasierte Sentimentanalyse ist eine Methode, bei der vorab definierte Wörterlisten, sogenannte Sentimentlexika, verwendet werden, um die Stimmung eines Textes zu bestimmen. Diese Lexika enthalten Wörter, die mit positiven oder negativen Gefühlen assoziiert sind, oft mit einem entsprechenden Gewicht, das die Stärke des Ausdrucks angibt."),
+      p_de("Die lexikonbasierte Sentimentanalyse ist die traditionelle Form des Verfahrens, bei der vorab definierte Wörterlisten, sogenannte Sentimentlexika, verwendet werden, um die Stimmung eines Textes zu bestimmen. Diese Lexika enthalten Wörter, die mit positiven oder negativen Gefühlen assoziiert sind, oft mit einem entsprechenden Gewicht, das die Stärke des Ausdrucks angibt."),
       # tags$div(
       #   shiny::textAreaInput(
       #     label="Beispieltext", inputId="sen_input-1", value="", rows=5,
@@ -119,56 +119,57 @@ main_content <- tags$div(
       #   HTML("<br>")
       # ),
       tags$br(),
-      tags$div(
-        tags$h4("Textaufbereitung"),
-        p_de("Der Prozess beginnt mit der Aufbereitung der Textdaten, die sowohl verschieden Schritter der Normalisierung als auch die Tokenisierung umfasst, um den Text in eine verarbeitbare Form zu bringen."),
-        tags$div(
-          fluidRow(
-            gt::gt_output(outputId="parse_spacy_table"),
-            height="100%"
-          ),
-          style="max-height: 300px;"
-        ),
-        HTML("<br>"),
-        id="item-1-1-1"
-      ),
-      tags$div(
-        tags$h4("Sentimentlexikon"),
-        p_de("Anschließend werden die Wörter des Textes mit den Einträgen im Lexikons (bspw. SentiWS oder German Polarity Clues) abgeglichen."),
-        tags$div(
-          fluidRow(
-            gt::gt_output(outputId="sentidict_tbl"),
-            HTML(
-              # https://tilemill-project.github.io/tilemill/docs/guides/advanced-legends/
-              "<div class='my-legend'>",
-              "  <div class='legend-title'>Sentimentwert</div>",
-              "  <div class='legend-scale'>",
-              "    <ul class='legend-labels'>",
-              "      <li><span class='sen-neg-max'></span>negativ</li>",
-              "      <li><span class='sen-neg-med'></span></li>",
-              "      <li><span class='sen-neg-min'></span></li>",
-              "      <li><span class='sen-neu'></span>neutral</li>",
-              "      <li><span class='sen-pos-min'></span></li>",
-              "      <li><span class='sen-pos-med'></span></li>",
-              "      <li><span class='sen-pos-max'></span>positiv</li>",
-              "    </ul>",
-              "  </div>",
-              "</div>"
-            )
-          ),
-          style="max-height: 800px;"
-        ),
-        HTML("<br>"),
-        id="item-1-1-2"
-      ),
+      # tags$div(
+      #   tags$h4("Textaufbereitung"),
+      #   p_de("Der Prozess beginnt mit der Aufbereitung der Textdaten, die sowohl verschieden Schritter der Normalisierung als auch die Tokenisierung umfasst, um den Text in eine verarbeitbare Form zu bringen."),
+      #   tags$div(
+      #     fluidRow(
+      #       gt::gt_output(outputId="parse_spacy_table"),
+      #       height="100%"
+      #     ),
+      #     style="max-height: 300px;"
+      #   ),
+      #   HTML("<br>"),
+      #   id="item-1-1-1"
+      # ),
+      # tags$div(
+      #   # tags$h4("Sentimentlexikon"),
+      #   tags$div(
+      #     fluidRow(
+      #       gt::gt_output(outputId="sentidict_tbl"),
+      #       HTML(
+      #         # https://tilemill-project.github.io/tilemill/docs/guides/advanced-legends/
+      #         "<div class='my-legend'>",
+      #         "  <div class='legend-title'>Sentimentwert</div>",
+      #         "  <div class='legend-scale'>",
+      #         "    <ul class='legend-labels'>",
+      #         "      <li><span class='sen-neg-max'></span>negativ</li>",
+      #         "      <li><span class='sen-neg-med'></span></li>",
+      #         "      <li><span class='sen-neg-min'></span></li>",
+      #         "      <li><span class='sen-neu'></span>neutral</li>",
+      #         "      <li><span class='sen-pos-min'></span></li>",
+      #         "      <li><span class='sen-pos-med'></span></li>",
+      #         "      <li><span class='sen-pos-max'></span>positiv</li>",
+      #         "    </ul>",
+      #         "  </div>",
+      #         "</div>"
+      #       )
+      #     ),
+      #     style="max-height: 800px;"
+      #   ),
+      #   HTML("<br>"),
+      #   id="item-1-1-2"
+      # ),
       tags$div(
         tags$h4("Berechnung"),
-        p_de("Die aggregierten Gewichte der Wörter aus dem Lexikon geben schließlich die Gesamtstimmung des Textes wieder."),
+        p_de("Zur Bewertung werden die Wörter des Textes mit den Einträgen im Lexikons (bspw. SentiWS oder German Polarity Clues) abgeglichen."),
         tags$br(),
         tags$div(
           fluidRow(uiOutput(outputId="sentidict_text")),
           style="max-height: 800px; width: 100%;"
         ),
+        tags$br(),
+        p_de("Die aggregierten Gewichte der Wörter aus dem Lexikon geben schließlich die Gesamtstimmung des Textes wieder."),
         tags$br(),
         tags$div(
           fluidRow(uiOutput(outputId="sentidict_score")),
@@ -179,9 +180,7 @@ main_content <- tags$div(
       ),
       tags$div(
         tags$h4("Kritik"),
-        p_de("Dieses Verfahren ist relativ einfach zu implementieren und erfordert keine umfangreichen Trainingsdaten, was es besonders für kleine Unternehmen mit begrenzten Ressourcen attraktiv macht."),
-        p_de("Aufgrund ihrer Einfachheit hat die lexikonbasierte Sentimentanalyse einige Schwächen. Eine der größten Herausforderungen ist der Umgang mit Kontext und Mehrdeutigkeit von Wörtern. Ein Wort wie „interessant“ kann je nach Kontext sowohl positiv als auch neutral oder negativ gemeint sein, was das Lexikon oft nicht korrekt erfasst."),
-        p_de("Außerdem kann diese Methode ironische oder sarkastische Aussagen nicht zuverlässig erkennen, da die wörtliche Bedeutung der Begriffe analysiert wird, ohne den eigentlichen Kontext zu berücksichtigen. Zudem sind Sentiment-Lexika oft nicht umfassend genug, um die Nuancen und Entwicklungen der Sprache abzubilden, was zu ungenauen Ergebnissen führen kann. Diese Schwächen können dazu führen, dass die lexikonbasierte Sentimentanalyse in komplexeren Szenarien weniger präzise ist als modellbasierte Ansätze."),
+        p_de("Die lexikonbasierte Sentimentanalyse ist aufgrund ihrer einfachen Implementierung und des geringen Bedarfs an Rechen- und Speicherkapazität besonders für kleine Unternehmen mit begrenzten Ressourcen attraktiv. Allerdings stößt sie in komplexen Szenarien schnell an ihre Grenzen, da sie Schwierigkeiten hat, den Kontext und die Mehrdeutigkeit von Wörtern korrekt zu erfassen. Eine Phrase wie „nicht schlecht“ kann beispielsweise fälschlicherweise als negativ interpretiert werden, obwohl sie im Kontext positiv gemeint ist."),
         HTML("<br>"),
         id="item-1-1-4"
       ),
@@ -236,7 +235,7 @@ main_content <- tags$div(
       id="item-1-2"
     ),
     id="item-1",
-    style="min-width=600px;"
+    style="min-width=600px; max-width=600px;"
   )
 )
 

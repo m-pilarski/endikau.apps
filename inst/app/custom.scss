@@ -1,3 +1,28 @@
+/*
+p:first-of-type::first-letter {
+  font-family: Georgia, serif;
+  float: left;
+  font-size: 7.125em;
+  font-weight: bold;
+  line-height: 0.65;
+  margin: 0;
+  padding: 0.05em 0.1em 0 0;
+}
+
+@supports (initial-letter: 2) or (-webkit-initial-letter: 2) {
+  p:first-of-type::first-letter {
+    -webkit-initial-letter: 4;
+    initial-letter: 4;
+    // undo other bits
+    float: none;
+    font-size: inherit;
+    line-height: inherit;
+    margin: 0;
+    padding: 0 0.25em 0 0;
+  }
+}
+*/
+
 .nav-underline {
   --bs-nav-link-font-size: 1.5rem;
 }

@@ -6,9 +6,13 @@ library(bslib)
 theme <- bs_add_rules(
   bs_theme(
     version="5",
-    base_font=font_google("Source Serif 4"),
-    code_font=font_google("IBM Plex Mono"),
+    # base_font=font_google("Source Serif 4"),
+    # base_font=font_google("Libre Franklin"),
+    # base_font=font_google("Source Sans 3"),
+    base_font=font_google("IBM Plex Sans"),
     heading_font=font_google("Bebas Neue"),
+    # heading_font=font_google("Source Serif 4", wght=600),
+    code_font=font_google("IBM Plex Mono"),
     font_scale=1.25
     # preset=c(builtin_themes(), bootswatch_themes())[4]
   ),
@@ -246,7 +250,7 @@ page_fillable(
     sidebar=sidebar(input_content, width="300px", position="left"),
     layout_sidebar(
       sidebar=sidebar(toc_content, open=list(desktop="always", mobile="closed"), position="right"),
-      tags$div(main_content, style="padding-left: 15px; padding-right: 15px"),
+      tags$div(main_content, style="padding-left: 15px; padding-right: 15px; max-width: 900px; margin: auto;"),
       fill=TRUE,
       fillable=FALSE,
       padding=0,
@@ -269,6 +273,7 @@ page_fillable(
   #     "})"
   #   ))
   # ),
+  margin="auto",
   title="sentiment app", lang="de", padding=0, gap=0, theme=theme
 )# |> as.character()
 

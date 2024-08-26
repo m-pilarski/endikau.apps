@@ -1,0 +1,33 @@
+$enable-grid-classes: false;
+$enable-cssgrid: true;
+
+.en-sidebar {
+  grid-area: sidebar;
+}
+.en-toc {
+  grid-area: toc;
+}
+.en-content {
+  grid-area: content;
+}
+.en-intro {
+  grid-area: intro;
+}
+
+.en-layout {
+  display: grid;
+  grid-template-areas:
+    "intro"
+    "toc"
+    "content";
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 1fr;
+  @include media-breakpoint-up(md) {
+    grid-template-areas:
+      "sidebar intro ."
+      "sidebar content toc";
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 1fr 4fr 1fr;
+    gap: 3rem;
+  }
+}

@@ -5,6 +5,9 @@ library(stringi)
 
 shinyOptions(cache_pointer=cachem::cache_mem())
 
+addResourcePath("shinyjs", system.file("srcjs", package="shinyjs"))
+addResourcePath("shinyjs", system.file("srcjs", package="shinyjs"))
+
 while(is(try(vns::use_vns_condaenv()), "try-error")){
   vns::setup_vns_condaenv(.install_miniconda=TRUE, .create_condaenv=TRUE)
 }
@@ -42,10 +45,3 @@ random_review <- function(){
     stringi::stri_c(doc_title, ". ", doc_text)
   })
 }
-
-################################################################################
-################################################################################
-################################################################################
-
-p_de <- purrr::partial(tags$p, `...`=, lang="de")
-span_en <- purrr::partial(tags$span, `...`=, lang="en")

@@ -1,0 +1,13 @@
+// Local docs variables
+$en-blue: #0069b4;
+$en-accent: #ffe484;
+
+$en-gutter-x: 3rem;
+
+:root {
+  --en-blue: #{$en-blue};
+  --en-accent: #{$en-accent};
+  --en-toc-color: var(--en-blue);
+  --en-pre-bg: var(--bs-tertiary-bg);
+}
+

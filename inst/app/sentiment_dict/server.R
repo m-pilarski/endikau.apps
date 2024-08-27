@@ -363,7 +363,7 @@ function(input, output, session) {
   })
 
   output$germansentiment_score <- renderText({
-    if(!is.null(.doc_germansentiment_tbl_task$result())){
+    if(.doc_germansentiment_tbl_task$status() == "success"){
       .doc_germansentiment_tbl_task$result() |>
         slice_head(n=1) |>
         mutate(

@@ -1,5 +1,7 @@
 library(dplyr)
 library(stringi)
+# library(future.callr)
+# plan(callr)
 
 `%||%` <- rlang::`%||%`
 

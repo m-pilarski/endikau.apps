@@ -1,4 +1,8 @@
 library(shiny)
+library(future)
+library(promises)
+
+plan(multisession)
 
 example_review <- paste0(
   "Leider nicht erhalten. Schade, dass der Artikel bis heute noch nicht ",
@@ -13,8 +17,10 @@ function(input, output, session) {
   vals <- reactiveValues(
     sen_vec = example_review,
     # sen_vec = c("ich mag das nicht", "das gefällt mir"),
-    sentidict_tbl = endikau.data::sentiws_tbl
+    sentidict_tbl = endikau.data::sentiws_tbl,
   )
+
+  .doc_germansentiment_tbl_rct <- reactiveVal(NULL)
 
   observeEvent(
     input$sentidict, {
@@ -110,11 +116,17 @@ function(input, output, session) {
     )
   )
 
-  .doc_germansentiment_tbl_rct <- reactive(
-    calc_doc_germansentiment_tbl_memo_each(
-      .doc_str=first(vals$sen_vec)
-    )
-  )
+  .doc_germansentiment_tbl_task <- ExtendedTask$new(function(.doc_str) {
+    future_promise({
+      vns::use_vns_condaenv()
+      vns::calc_doc_germansentiment_tbl(.doc_str=.doc_str)
+    })
+  })
+
+  observe({
+    .doc_germansentiment_tbl_task$invoke(.doc_str=first(vals$sen_vec))
+  })
+
 
   observeEvent(input$delete_row, {
     idx <- as.integer(
@@ -351,25 +363,30 @@ function(input, output, session) {
   })
 
   output$germansentiment_score <- renderText({
-    .doc_germansentiment_tbl_rct() |>
-      slice_head(n=1) |>
-      mutate(
-        doc_class_lab =
-          doc_class_lab |>
-          case_match(
-            "positive"~"<span class='sen-pos-med bubble'> Positive",
-            "neutral"~"<span class='sen-neu bubble'> Neutrale",
-            "negative"~"<span class='sen-neg-med bubble'> Negative"
-          ) |>
-          stringi::stri_c("Stimmung</span> ", sep=" ")
-      ) |>
-      summarize(
-        class_prob_str = stringi::stri_c(
-          doc_class_lab, " mit einer Wahrscheinlichkeit von ",
-          scales::label_percent()(doc_class_prob)
-        )
-      ) |>
-      pull(class_prob_str)
+    if(!is.null(.doc_germansentiment_tbl_task$result())){
+      .doc_germansentiment_tbl_task$result() |>
+        slice_head(n=1) |>
+        mutate(
+          doc_class_lab =
+            doc_class_lab |>
+            case_match(
+              "positive"~"<span class='sen-pos-med bubble'> Positive",
+              "neutral"~"<span class='sen-neu bubble'> Neutrale",
+              "negative"~"<span class='sen-neg-med bubble'> Negative"
+            ) |>
+            stringi::stri_c("Stimmung</span> ", sep=" ")
+        ) |>
+        summarize(
+          class_prob_str = stringi::stri_c(
+            doc_class_lab, " mit einer Wahrscheinlichkeit von ",
+            scales::label_percent()(doc_class_prob)
+          )
+        ) |>
+        pull(class_prob_str)
+    }else{
+      "... rechnet noch ..."
+    }
+    # "test"
   })
 
   output$sentidict_tbl <- gt::render_gt({
@@ -406,15 +423,15 @@ function(input, output, session) {
 
   })
 
-  timer <- reactive({
-    # invalidate 1 minute later
-    invalidateLater(1000 * 5)
-    shinyjs::runjs(paste0(
-      "$('[data-spy=\"scroll\"]').each(function () {",
-      "  var $spy = $(this).scrollspy('refresh')",
-      "})"
-    ))
-    message("adjusted scrollspy")
-  })
+  # timer <- reactive({
+  #   # invalidate 1 minute later
+  #   invalidateLater(1000 * 5)
+  #   shinyjs::runjs(paste0(
+  #     "$('[data-spy=\"scroll\"]').each(function () {",
+  #     "  var $spy = $(this).scrollspy('refresh')",
+  #     "})"
+  #   ))
+  #   message("adjusted scrollspy")
+  # })
 
 }

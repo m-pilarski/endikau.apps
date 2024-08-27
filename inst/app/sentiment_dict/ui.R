@@ -19,7 +19,7 @@ sen_input_1 <- tags$div(
     )
   ),
   tags$div(
-    class="g-col-12 g-col-lg-6",
+    class="g-col-12 g-col-md-6",
     bslib::input_task_button(
       id="sen_random-1", class="block", label="Vorschlagen",
       icon=icon("dice"), label_busy="", width="100%",
@@ -28,7 +28,7 @@ sen_input_1 <- tags$div(
       )
     ),
     tags$div(
-      class="g-col-12 g-col-lg-6",
+      class="g-col-12 g-col-md-6",
       bslib::input_task_button(
         id="sen_add-1", class="block", label="Analysieren",
         icon=icon("calculator"), label_busy="", width="100%",
@@ -54,9 +54,33 @@ sen_input_1 <- tags$div(
 #   # HTML("<br>"),
 #   # style="height: 100%;"
 # )
+legend_sentiment <- tags$svg(
+  width="100%", height="4rem",
+  tags$image(href="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f641.svg", x="000%", y="0rem", height="15", width="15", transform="translate(-00.0,0)", style="filter: grayscale(100%);"),
+  tags$image(href="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f610.svg", x="050%", y="0rem", height="15", width="15", transform="translate(-07.5,0)", style="filter: grayscale(100%);"),
+  tags$image(href="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f642.svg", x="100%", y="0rem", height="15", width="15", transform="translate(-15.0,0)", style="filter: grayscale(100%);"),
+  tags$svg(
+    y="1.5rem", height="0.875rem", width="100%", viewBox="0 0 7 1", preserveAspectRatio="none",
+    tags$rect(x="0", y="0", width="1.01", height="1", fill="#cf597e"),
+    tags$rect(x="1", y="0", width="1.01", height="1", fill="#e88471"),
+    tags$rect(x="2", y="0", width="1.01", height="1", fill="#eeb479"),
+    tags$rect(x="3", y="0", width="1.01", height="1", fill="#e9e29c"),
+    tags$rect(x="4", y="0", width="1.01", height="1", fill="#9ccb86"),
+    tags$rect(x="5", y="0", width="1.01", height="1", fill="#39b185"),
+    tags$rect(x="6", y="0", width="1", height="1.5", fill="#009392"),
+  ),
+  tags$svg(
+    `alignment-baseline`="bottom", y="0%",
+    tags$text(x="0%", y="3.5rem", `text-anchor`="start", `font-size`="0.875rem", "negative"),
+    tags$text(x="50%", y="3.5rem", `text-anchor`="middle", `font-size`="0.875rem", "neutral"),
+    tags$text(x="100%", y="3.5rem", `text-anchor`="end", `font-size`="0.875rem", "positive")
+  )
+)
 
 element_intro <- tags$div(
   class="en-intro",
+  # legend_sentiment,
+  # HTML("&#128578;"),
   tags$h2("Sentimentanalyse"),
   tags$div(
     p_de("Sentimentanalyse ist ein Verfahren der Data Science, das darauf abzielt, Meinungen, Emotionen und Einstellungen in Textdaten automatisch zu identifizieren und zu klassifizieren. Unternehmen setzen Sentimentanalyse häufig ein, um Kundenfeedback aus sozialen Medien, Rezensionen oder Umfragen zu analysieren. So können sie wertvolle Einblicke in die Kundenzufriedenheit und Markttrends gewinnen."),
@@ -148,6 +172,7 @@ element_content <- tags$div(
         tags$div(
           class="grid",
           div(class="g-col-12", uiOutput(outputId="sentidict_text")),
+          div(class="g-col-12", legend_sentiment),
           div(class="g-col-12", uiOutput(outputId="sentidict_score"), style="overflow-x: scroll")
         )
       ),
@@ -159,8 +184,8 @@ element_content <- tags$div(
     ),
     tags$div(
       id="item-1-2",
-      tags$h3("Machine-Learning-Basierte Sentimentanalyse"),
-      p_de("Im Gegensatz zu lexikonbasierten Ansätzen bieten vortrainierte transformer-basierte Modelle, wie beispielsweise BERT (Bidirectional Encoder Representations from Transformers) und GPT (Generative Pre-trained Transformer), eine fortschrittliche Möglichkeit zur Sentimentanalyse. Diese Modelle sind auf großen Textkorpora vortrainiert und können kontextabhängige Bedeutungen erfassen, was ihnen ermöglicht, die Stimmung eines Textes mit hoher Genauigkeit zu bestimmen. Sie verwenden Mechanismen wie die Selbstaufmerksamkeit, um Beziehungen zwischen Wörtern im Text besser zu verstehen, selbst wenn diese weit voneinander entfernt sind. Dies erlaubt ihnen, subtile sprachliche Nuancen, Mehrdeutigkeiten und komplexe Sprachstrukturen zu erkennen und zu interpretieren. Ein wesentlicher Vorteil dieser Modelle ist ihre Fähigkeit, auch in unbekannten Domänen oder bei sarkastischen und ironischen Texten zuverlässige Ergebnisse zu liefern, da sie aus einer Vielzahl von Beispielen lernen. Darüber hinaus können sie ohne spezifische Lexika auskommen und sind durch Fine-Tuning flexibel an spezifische Anwendungsfälle anpassbar, was sie besonders leistungsstark und vielseitig macht."),
+      tags$h3("Machine-Learning-Basierte ", HTML("&#128578;"), "Sentimentanalyse"),
+      p_de("Im Gegensatz zu lexikonbasierten Ansätzen bieten vortrainierte transformer basierte Modelle, wie beispielsweise BERT (Bidirectional Encoder Representations from Transformers) und GPT (Generative Pre-trained Transformer), eine fortschrittliche Möglichkeit zur Sentimentanalyse. Diese Modelle sind auf großen Textkorpora vortrainiert und können kontextabhängige Bedeutungen erfassen, was ihnen ermöglicht, die Stimmung eines Textes mit hoher Genauigkeit zu bestimmen. Sie verwenden Mechanismen wie die Selbstaufmerksamkeit, um Beziehungen zwischen Wörtern im Text besser zu verstehen, selbst wenn diese weit voneinander entfernt sind. Dies erlaubt ihnen, subtile sprachliche Nuancen, Mehrdeutigkeiten und komplexe Sprachstrukturen zu erkennen und zu interpretieren. Ein wesentlicher Vorteil dieser Modelle ist ihre Fähigkeit, auch in unbekannten Domänen oder bei sarkastischen und ironischen Texten zuverlässige Ergebnisse zu liefern, da sie aus einer Vielzahl von Beispielen lernen. Darüber hinaus können sie ohne spezifische Lexika auskommen und sind durch Fine-Tuning flexibel an spezifische Anwendungsfälle anpassbar, was sie besonders leistungsstark und vielseitig macht."),
       # tags$div(
       #   # card_title("Beispieltext"),
       #   tagAppendAttributes(
@@ -285,7 +310,8 @@ element_sidebar <- tags$div(class="en-sidebar")
 page_fillable(
   tags$head(
     tags$script(src="shinyjs/inject.js"),
-    withMathJax()
+    withMathJax(),
+    tags$script(src="https://cdn.jsdelivr.net/npm/@twemoji/api@latest/dist/twemoji.min.js", crossorigin="anonymous")
   ),
   tags$div(
     class="container-xxl en-layout",
@@ -301,11 +327,12 @@ page_fillable(
   tags$script(
     readr::read_file(system.file("app", "assests", "js", "toc_height.js", package="endikau.apps"))
   ),
+  tags$script("window.onload = function() { twemoji.parse(document.body, {folder: 'svg', ext: '.svg'} ); }"),
   tags$footer(
     tags$div(
       class="container-xxl grid align-self-center",
       tags$div(
-        class="g-col-12 g-col-md-8 g-start-md-3",
+        class="g-col-12 g-col-md-8 g-start-md-3", style="margin-x: 1.5rem;",
         !!!stringi::stri_rand_lipsum(1)
       )
     )

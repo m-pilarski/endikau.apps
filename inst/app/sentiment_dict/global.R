@@ -45,3 +45,7 @@ random_review <- function(){
     stringi::stri_c(doc_title, ". ", doc_text)
   })
 }
+
+color_palette <- jsonlite::read_json(
+  system.file("app", "sentiment_dict", "colors.json", package="endikau.apps")
+)

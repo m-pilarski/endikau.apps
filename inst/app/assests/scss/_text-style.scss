@@ -38,3 +38,13 @@
 .sen-neg-med{background: #e88471;}
 .sen-neg-max{background: #cf597e;}
 .sen-miss{color: #bababa}
+
+
+img.emoji {
+  /* Since we are using SVGs, you have to change the width using CSS */
+  height: 1em;
+  width: 1em;
+  margin: 0 .05em 0 .1em;
+  vertical-align: -0.1em;
+  pointer-events: none;
+}

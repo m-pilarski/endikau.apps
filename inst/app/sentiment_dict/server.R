@@ -257,18 +257,57 @@ function(input, output, session) {
   })
 
   output$sentidict_text <- renderText(
+
     .doc_sentidict_tbl_rct() |>
-      slice_min(doc_id, n=1) |>
-      mutate(across(where(is.factor), as.character)) |>
+      mutate(
+        tok_pol_lab =
+          tok_pol_lab |>
+          (`[<-`)(
+            i=`&`(
+              tok_pol_lab == "sen-miss",
+              stringi::stri_detect_regex(tok_str, "[[:alpha:]]")
+            ),
+            value="sen-neu"
+          ) |>
+          (`[<-`)(
+            i=stringi::stri_detect_regex(tok_str, "[[:space:]]"),
+            value=NA_integer_
+          ) |>
+          vctrs::vec_fill_missing(direction="updown"),
+        tok_pol_lab_interval = cumsum(
+          `&`(
+            tidyr::replace_na(tok_pol_lab != lag(tok_pol_lab), FALSE),
+            stringi::stri_detect_regex(lag(tok_str), "[^[:space:]]")
+          )
+        )
+      ) |>
+      summarize(
+        text_str = stringi::stri_trim_both(stringi::stri_c(tok_str, collapse="")),
+        text_pol_lab = unique(as.character(tok_pol_lab)),
+        .by=tok_pol_lab_interval
+      ) |>
+      mutate(
+        text_pol_col = text_pol_lab |> as.character() |> case_match(
+          "sen-pos-max"~"#009392",
+          "sen-pos-med"~"#39b185",
+          "sen-pos-min"~"#9ccb86",
+          "sen-neu"~"#e9e29c",
+          "sen-neg-min"~"#eeb479",
+          "sen-neg-med"~"#e88471",
+          "sen-neg-max"~"#cf597e",
+          "sen-miss"~"#bababa"
+        )
+      ) |>
       purrr::transpose() |>
       purrr::map_chr(\(.tok_data){
         stringi::stri_c(
-          "<span class='", .tok_data$tok_pol_lab, " bubble' data-toggle='tooltip' ",
-          "data-placement='top' title='", .tok_data$tok_pol_num, "'>",
-          .tok_data$tok_str, "</span>"
+          "<span class='", .tok_data$text_pol_lab, "'>&thinsp;",
+          .tok_data$text_str, "&thinsp;</span>"
         )
       }) |>
-      stringi::stri_c(collapse="")
+      stringi::stri_c(collapse="") |>
+      (\(.x){stringi::stri_c("<p class='p-just' lang='de'>", .x, "</p>")})()
+
   )
 
   output$sentidict_score <- renderText({
@@ -283,7 +322,8 @@ function(input, output, session) {
           "sen-neg-min"~"#eeb479",
           "sen-neg-med"~"#e88471",
           "sen-neg-max"~"#cf597e",
-          "sen-miss"~"#bababa"
+          "sen-miss"~"#bababa",
+          .default=NA_character_
         )
       ) |>
       summarize(

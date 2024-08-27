@@ -4,7 +4,6 @@
     position: sticky;
     // top: 0;
     top: 3rem;
-    bottom: 3rem;
     right: 0;
     z-index: 2;
     height: calc(100vh - 7rem);
@@ -38,14 +37,17 @@
       border-left: .125rem solid transparent;
       // border-radius: 0 !important;
 
-      &:hover,
-      &.active {
+      &:hover {
         color: var(--en-toc-color);
         border-left-color: var(--en-toc-color);
       }
 
-      &.active {
-        font-weight: 500;
+      @include media-breakpoint-up(md) {
+        &.active {
+          color: var(--en-toc-color);
+          border-left-color: var(--en-toc-color);
+          font-weight: 500;
+        }
       }
 
       code {

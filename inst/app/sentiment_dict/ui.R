@@ -328,6 +328,7 @@ page_fillable(
     readr::read_file(system.file("app", "assests", "js", "toc_height.js", package="endikau.apps"))
   ),
   tags$script("window.onload = function() { twemoji.parse(document.body, {folder: 'svg', ext: '.svg'} ); }"),
+  tags$script(src='https://cdn.jsdelivr.net/npm/@iframe-resizer/child', type='text/javascript', async=NA),
   tags$footer(
     tags$div(
       class="container-xxl grid align-self-center",

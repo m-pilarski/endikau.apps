@@ -61,9 +61,11 @@ function(input, output, session) {
 
   .germansentiment_rsess <- r_session$new(wait=TRUE)
   observe({
-    .germansentiment_rsess$interrupt()
+    while(.germansentiment_rsess$get_state() == "busy"){Sys.sleep(1)}
+    print("start")
+    .doc_germansentiment_tbl_rct(NULL)
     .germansentiment_rsess$call(\(..doc_str){
-      if(!exists("...germansentiment_model")){
+      if(!exists("..germansentiment_model")){
         vns::use_vns_condaenv()
         ..germansentiment_model <<- vns::load_germansentiment_model()
       }
@@ -78,8 +80,12 @@ function(input, output, session) {
     .doc_germansentiment_tbl <- purrr::pluck(
       .germansentiment_rsess$read(), "result"
     )
+    print(.doc_germansentiment_tbl)
     if(!is.null(.doc_germansentiment_tbl)){
       .doc_germansentiment_tbl_rct(.doc_germansentiment_tbl)
+      print("done")
+    }else{
+      print(.germansentiment_rsess$get_state())
     }
   })
 

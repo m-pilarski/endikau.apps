@@ -22,19 +22,19 @@ sen_input_1 <- tags$div(
     class="g-col-12 g-col-md-6",
     bslib::input_task_button(
       id="sen_random-1", class="block", label="Vorschlagen",
-      icon=icon("dice"), label_busy="", width="100%",
+      icon=icon("dice"), label_busy="", style="width: 100%;",
       icon_busy=tags$i(
         class="fa-solid fa-sync fa-spin", role="presentation"
       )
-    ),
-    tags$div(
-      class="g-col-12 g-col-md-6",
-      bslib::input_task_button(
-        id="sen_add-1", class="block", label="Analysieren",
-        icon=icon("calculator"), label_busy="", width="100%",
-        icon_busy=tags$i(
-          class="fa-solid fa-sync fa-spin", role="presentation"
-        )
+    )
+  ),
+  tags$div(
+    class="g-col-12 g-col-md-6",
+    bslib::input_task_button(
+      id="sen_add-1", class="block", label="Analysieren",
+      icon=icon("calculator"), label_busy="", style="width: 100%;",
+      icon_busy=tags$i(
+        class="fa-solid fa-sync fa-spin", role="presentation"
       )
     )
   )
@@ -56,9 +56,9 @@ sen_input_1 <- tags$div(
 # )
 legend_sentiment <- tags$svg(
   width="100%", height="4rem",
-  tags$image(href="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f641.svg", x="000%", y="0rem", height="15", width="15", transform="translate(-00.0,0)", style="filter: grayscale(100%);"),
-  tags$image(href="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f610.svg", x="050%", y="0rem", height="15", width="15", transform="translate(-07.5,0)", style="filter: grayscale(100%);"),
-  tags$image(href="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f642.svg", x="100%", y="0rem", height="15", width="15", transform="translate(-15.0,0)", style="filter: grayscale(100%);"),
+  tags$image(href="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f641.svg", x="000%", y="0rem", height="20", width="20", transform="translate(-00,0)", style="filter: grayscale(100%);"),
+  tags$image(href="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f610.svg", x="050%", y="0rem", height="20", width="20", transform="translate(-10,0)", style="filter: grayscale(100%);"),
+  tags$image(href="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f642.svg", x="100%", y="0rem", height="20", width="20", transform="translate(-20,0)", style="filter: grayscale(100%);"),
   tags$svg(
     y="1.5rem", height="0.875rem", width="100%", viewBox="0 0 7 1", preserveAspectRatio="none",
     tags$rect(x="0", y="0", width="1.01", height="1", fill="#cf597e"),
@@ -71,9 +71,9 @@ legend_sentiment <- tags$svg(
   ),
   tags$svg(
     `alignment-baseline`="bottom", y="0%",
-    tags$text(x="0%", y="3.5rem", `text-anchor`="start", `font-size`="0.875rem", "negative"),
+    tags$text(x="0%", y="3.5rem", `text-anchor`="start", `font-size`="0.875rem", "negativ"),
     tags$text(x="50%", y="3.5rem", `text-anchor`="middle", `font-size`="0.875rem", "neutral"),
-    tags$text(x="100%", y="3.5rem", `text-anchor`="end", `font-size`="0.875rem", "positive")
+    tags$text(x="100%", y="3.5rem", `text-anchor`="end", `font-size`="0.875rem", "positiv")
   )
 )
 
@@ -184,7 +184,7 @@ element_content <- tags$div(
     ),
     tags$div(
       id="item-1-2",
-      tags$h3("Machine-Learning-Basierte ", HTML("&#128578;"), "Sentimentanalyse"),
+      tags$h3("Machine-Learning-Basierte Sentimentanalyse"),
       p_de("Im Gegensatz zu lexikonbasierten Ansätzen bieten vortrainierte transformer basierte Modelle, wie beispielsweise BERT (Bidirectional Encoder Representations from Transformers) und GPT (Generative Pre-trained Transformer), eine fortschrittliche Möglichkeit zur Sentimentanalyse. Diese Modelle sind auf großen Textkorpora vortrainiert und können kontextabhängige Bedeutungen erfassen, was ihnen ermöglicht, die Stimmung eines Textes mit hoher Genauigkeit zu bestimmen. Sie verwenden Mechanismen wie die Selbstaufmerksamkeit, um Beziehungen zwischen Wörtern im Text besser zu verstehen, selbst wenn diese weit voneinander entfernt sind. Dies erlaubt ihnen, subtile sprachliche Nuancen, Mehrdeutigkeiten und komplexe Sprachstrukturen zu erkennen und zu interpretieren. Ein wesentlicher Vorteil dieser Modelle ist ihre Fähigkeit, auch in unbekannten Domänen oder bei sarkastischen und ironischen Texten zuverlässige Ergebnisse zu liefern, da sie aus einer Vielzahl von Beispielen lernen. Darüber hinaus können sie ohne spezifische Lexika auskommen und sind durch Fine-Tuning flexibel an spezifische Anwendungsfälle anpassbar, was sie besonders leistungsstark und vielseitig macht."),
       # tags$div(
       #   # card_title("Beispieltext"),
@@ -285,7 +285,8 @@ site_theme <-
   bs_add_rules(sass::sass_file(system.file("app", "assests", "scss", "_variables.scss", package="endikau.apps"))) |>
   bs_add_rules(sass::sass_file(system.file("app", "assests", "scss", "_layout.scss", package="endikau.apps"))) |>
   bs_add_rules(sass::sass_file(system.file("app", "assests", "scss", "_toc.scss", package="endikau.apps"))) |>
-  bs_add_rules(sass::sass_file(system.file("app", "assests", "scss", "_text-style.scss", package="endikau.apps")))
+  bs_add_rules(sass::sass_file(system.file("app", "assests", "scss", "_text-style.scss", package="endikau.apps"))) |>
+  bs_add_rules(sass::sass_file(system.file("app", "assests", "scss", "_io.scss", package="endikau.apps")))
 
 element_toc <- tags$div(
   id="page-toc-container",
@@ -328,13 +329,13 @@ page_fillable(
     readr::read_file(system.file("app", "assests", "js", "toc_height.js", package="endikau.apps"))
   ),
   tags$script("window.onload = function() { twemoji.parse(document.body, {folder: 'svg', ext: '.svg'} ); }"),
-  tags$script(src='https://cdn.jsdelivr.net/npm/@iframe-resizer/child', type='text/javascript', async=NA),
+  # tags$script(src='https://cdn.jsdelivr.net/npm/@iframe-resizer/child', type='text/javascript', async=NA),
   tags$footer(
     tags$div(
       class="container-xxl grid align-self-center",
       tags$div(
         class="g-col-12 g-col-md-8 g-start-md-3", style="margin-x: 1.5rem;",
-        !!!stringi::stri_rand_lipsum(1)
+        !!!stringi::stri_rand_lipsum(2)
       )
     )
   ),

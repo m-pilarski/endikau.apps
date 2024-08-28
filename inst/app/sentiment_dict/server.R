@@ -60,6 +60,8 @@ function(input, output, session) {
   )
 
   .germansentiment_rsess <- r_session$new(wait=TRUE)
+  # on.exit({.germansentiment_rsess$kill()})
+  # if(interactive()){vals <- list(sen_vec = "Hallo, das ist ein Test!")}
   observe({
     while(.germansentiment_rsess$get_state() == "busy"){Sys.sleep(1)}
     print("start")
@@ -80,13 +82,12 @@ function(input, output, session) {
     .doc_germansentiment_tbl <- purrr::pluck(
       .germansentiment_rsess$read(), "result"
     )
-    print(.doc_germansentiment_tbl)
     if(!is.null(.doc_germansentiment_tbl)){
       .doc_germansentiment_tbl_rct(.doc_germansentiment_tbl)
       print("done")
-    }else{
-      print(.germansentiment_rsess$get_state())
-    }
+    } # else{
+    #   print(.germansentiment_rsess$get_state())
+    # }
   })
 
   output$sentidict_table <- gt::render_gt({

@@ -6,41 +6,50 @@ library(bslib)
 p_de <- purrr::partial(tags$p, ...=, class="p-just", lang="de")
 span_en <- purrr::partial(tags$span, ...=, lang="en")
 
-sen_input_1 <- tags$div(
-  class="grid",
+make_sen_input <- function(
+  .text_input_id="sen_input-1", .random_button_id="sen_random-1",
+  .add_button_id="sen_add-1"
+){
   tags$div(
-    class="g-col-12",
-    tagAppendAttributes(
-      shiny::textAreaInput(
-        label="Beispieltext", inputId="sen_input-1", value="", rows=4,
-        resize="none", width="100%"
-      ),
-      spellcheck="false"
-    )
-  ),
-  tags$div(
-    class="g-col-12 g-col-md-6",
-    bslib::input_task_button(
-      id="sen_random-1", class="block", label="Vorschlagen",
-      icon=icon("dice"), label_busy="", style="width: 100%;",
-      icon_busy=tags$i(
-        class="fa-solid fa-sync fa-spin", role="presentation"
+    class="grid",
+    tags$div(
+      class="g-col-12",
+      htmltools::tagAppendAttributes(
+        shiny::textAreaInput(
+          label="Beispieltext", inputId=.text_input_id, value="", rows=4,
+          resize="none", width="100%"
+        ),
+        spellcheck="false"
       )
-    )
-  ),
-  tags$div(
-    class="g-col-12 g-col-md-6",
-    bslib::input_task_button(
-      id="sen_add-1", class="block", label="Analysieren",
-      icon=icon("calculator"), label_busy="", style="width: 100%;",
-      icon_busy=tags$i(
-        class="fa-solid fa-sync fa-spin", role="presentation"
+    ),
+    tags$div(
+      class="g-col-12 g-col-md-6",
+      bslib::input_task_button(
+        id=.random_button_id, class="block", label="Vorschlagen",
+        icon=icon("dice"), label_busy="", style="width: 100%;",
+        icon_busy=tags$i(class="fa-solid fa-sync fa-spin", role="presentation")
+      )
+    ),
+    tags$div(
+      class="g-col-12 g-col-md-6",
+      bslib::input_task_button(
+        id=.add_button_id, class="block", label="Analysieren",
+        icon=icon("calculator"), label_busy="", style="width: 100%;",
+        icon_busy=tags$i(class="fa-solid fa-sync fa-spin", role="presentation")
       )
     )
   )
+}
+
+sen_input_1 <- make_sen_input(
+  .text_input_id="sen_input-1", .random_button_id="sen_random-1",
+  .add_button_id="sen_add-1"
 )
 
-
+sen_input_2 <- make_sen_input(
+  .text_input_id="sen_input-2", .random_button_id="sen_random-2",
+  .add_button_id="sen_add-2"
+)
 
 # input_content <- tags$div(
 #   HTML("<br>"),
@@ -197,7 +206,7 @@ element_content <- tags$div(
     tags$div(
       id="item-1-2",
       tags$h3("Machine-Learning-Basierte Sentimentanalyse"),
-      p_de("Im Gegensatz zu lexikonbasierten Ansätzen bieten vortrainierte transformer basierte Modelle, wie beispielsweise BERT (Bidirectional Encoder Representations from Transformers) und GPT (Generative Pre-trained Transformer), eine fortschrittliche Möglichkeit zur Sentimentanalyse. Diese Modelle sind auf großen Textkorpora vortrainiert und können kontextabhängige Bedeutungen erfassen, was ihnen ermöglicht, die Stimmung eines Textes mit hoher Genauigkeit zu bestimmen. Sie verwenden Mechanismen wie die Selbstaufmerksamkeit, um Beziehungen zwischen Wörtern im Text besser zu verstehen, selbst wenn diese weit voneinander entfernt sind. Dies erlaubt ihnen, subtile sprachliche Nuancen, Mehrdeutigkeiten und komplexe Sprachstrukturen zu erkennen und zu interpretieren. Ein wesentlicher Vorteil dieser Modelle ist ihre Fähigkeit, auch in unbekannten Domänen oder bei sarkastischen und ironischen Texten zuverlässige Ergebnisse zu liefern, da sie aus einer Vielzahl von Beispielen lernen. Darüber hinaus können sie ohne spezifische Lexika auskommen und sind durch Fine-Tuning flexibel an spezifische Anwendungsfälle anpassbar, was sie besonders leistungsstark und vielseitig macht."),
+      p_de("Im Gegensatz zu lexikonbasierten Ansätzen bieten vortrainierte Modelle, die auf allgemeinen Sprachmodellen wie BERT (Bidirectional Encoder Representations from Transformers) basieren, eine fortschrittliche Möglichkeit zur Sentimentanalyse. Diese Modelle lernen aus einer Vielzahl von Beispielen und liefern auch in unbekannten Domänen oder bei komplexen sprachlichen Strukturen, wie Sarkasmus, verlässlichere Ergebnisse. Sie sind nicht auf spezifische Lexika angewiesen und können durch Fine-Tuning flexibel an unterschiedliche Anwendungsfälle angepasst werden, was sie besonders leistungsstark und vielseitig macht."),
       # tags$div(
       #   # card_title("Beispieltext"),
       #   tagAppendAttributes(
@@ -234,6 +243,7 @@ element_content <- tags$div(
       tags$div(
         id="item-1-2-1",
         tags$h4("Berechnung"),
+        sen_input_2,
         tags$div(
           fluidRow(uiOutput(outputId="germansentiment_score")),
           style="max-height: 300px; width: 100%;"

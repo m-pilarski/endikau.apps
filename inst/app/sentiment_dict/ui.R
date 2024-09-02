@@ -88,20 +88,18 @@ legend_sentiment <- tags$svg(
 
 element_intro <- tags$div(
   class="en-intro",
-  # legend_sentiment,
-  # HTML("&#128578;"),
   endikau.site::format_fa_list(
     list(
       "fa-solid fa-check-square"="Das ist ein Test",
       "fa-solid fa-spinner fa-pulse"="Das hier auch",
       list(
-        "fa-solid fa-spinner fa-pulse"="Hier geht es weiter"
+        "fa-solid fa-plus fa-spin"="Hier geht es weiter 💞"
       )
     )
   ),
   tags$h2("Sentimentanalyse"),
   tags$div(
-    p_de("Sentimentanalyse ist ein Verfahren der Data Science, das darauf abzielt, Meinungen, Emotionen und Einstellungen in Textdaten automatisch zu identifizieren und zu klassifizieren. Unternehmen setzen Sentimentanalyse häufig ein, um Kundenfeedback aus sozialen Medien, Rezensionen oder Umfragen zu analysieren. So können sie wertvolle Einblicke in die Kundenzufriedenheit und Markttrends gewinnen."),
+    p_de("Sentimentanalyse ist ein Verfahren der Data Science, das darauf abzielt, Meinungen, Emotionen und Einstellungen in Textdaten automatisch zu identifizieren und zu klassifizieren. Unternehmen setzen Sentimentanalyse häufig ein, um Kundenfeedback aus sozialen Medien, Rezensionen oder Umfragen zu analysieren. So können sie wertvolle Einblicke in Bereiche wie die Kundenzufriedenheit oder Markttrends gewinnen."),
     HTML("<br>")
   )
 )
@@ -185,7 +183,6 @@ element_content <- tags$div(
       tags$div(
         id="lexikon-berechnung",
         tags$h4("Berechnung"),
-        HTML("<ul class='fa-ul'><li><span class='fa-li'><i class='fa-solid fa-check-square'></i></span>Das ist ein Test</li><li><span class='fa-li'><i class='fa-solid fa-spinner fa-pulse'></i></span>Das hier auch</li><ul class='fa-ul'><li><span class='fa-li'><i class='fa-solid fa-spinner fa-pulse'></i></span>Hier geht es weiter</li></ul></ul>"),
         p_de("Zur Bewertung werden die Wörter des Textes mit den Einträgen im Lexikons (bspw. SentiWS oder German Polarity Clues) abgeglichen. Die aggregierten Gewichte der Wörter aus dem Lexikon geben schließlich die Gesamtstimmung des Textes wieder."),
         tags$div(
           class="grid",
@@ -304,11 +301,11 @@ site_theme <-
   bslib::bs_add_variables(
     "enable-grid-classes"="false", "enable-cssgrid"="true"
   ) |>
-  bs_add_rules(sass::sass_file(system.file("app", "assests", "scss", "_variables.scss", package="endikau.apps"))) |>
-  bs_add_rules(sass::sass_file(system.file("app", "assests", "scss", "_layout.scss", package="endikau.apps"))) |>
-  bs_add_rules(sass::sass_file(system.file("app", "assests", "scss", "_toc.scss", package="endikau.apps"))) |>
-  bs_add_rules(sass::sass_file(system.file("app", "assests", "scss", "_text-style.scss", package="endikau.apps"))) |>
-  bs_add_rules(sass::sass_file(system.file("app", "assests", "scss", "_io.scss", package="endikau.apps")))
+  bs_add_rules(sass::sass_file(fs::path_package("www", "assets", "scss", "_variables.scss", package="endikau.site"))) |>
+  bs_add_rules(sass::sass_file(fs::path_package("www", "assets", "scss", "_layout.scss", package="endikau.site"))) |>
+  bs_add_rules(sass::sass_file(fs::path_package("www", "assets", "scss", "_toc.scss", package="endikau.site"))) |>
+  bs_add_rules(sass::sass_file(fs::path_package("www", "assets", "scss", "_text-style.scss", package="endikau.site"))) |>
+  bs_add_rules(sass::sass_file(fs::path_package("www", "assets", "scss", "_io.scss", package="endikau.site")))
 
 element_toc <- endikau.site::format_en_toc(
   list(
@@ -328,6 +325,7 @@ page_fillable(
     tags$script(src="shinyjs/inject.js"),
     withMathJax(),
     tags$script(src="https://cdn.jsdelivr.net/npm/@twemoji/api@latest/dist/twemoji.min.js", crossorigin="anonymous")
+    # tags$script(src=fs::path_package("www", "assets", "vendor", "twemoji", "twemoji.min.js", package="endikau.site"), crossorigin="anonymous")
   ),
   tags$div(
     class="container-xxl en-layout",

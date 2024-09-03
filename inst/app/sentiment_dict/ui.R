@@ -1,14 +1,12 @@
 library(shiny)
 library(bslib)
 
-`%||%` <- rlang::`%||%`
-
-p_de <- purrr::partial(tags$p, ...=, class="p-just", lang="de")
-span_en <- purrr::partial(tags$span, ...=, lang="en")
+p_de <- purrr::partial(htmltools::tags$p, ...=, class="p-just", lang="de")
+span_en <- purrr::partial(htmltools::tags$span, ...=, lang="en")
 
 make_sen_input <- function(
-  .text_input_id="sen_input-1", .random_button_id="sen_random-1",
-  .add_button_id="sen_add-1"
+  .text_input_id="sen_input_1", .random_button_id="sen_random_1",
+  .add_button_id="sen_add_1"
 ){
   tags$div(
     class="grid",
@@ -16,8 +14,9 @@ make_sen_input <- function(
       class="g-col-12",
       htmltools::tagAppendAttributes(
         shiny::textAreaInput(
-          label="Beispieltext", inputId=.text_input_id, value="", rows=4,
-          resize="none", width="100%"
+          label=NULL,
+          inputId=.text_input_id, value=example_review,
+          rows=5, resize="none", width="100%"
         ),
         spellcheck="false"
       )
@@ -42,13 +41,13 @@ make_sen_input <- function(
 }
 
 sen_input_1 <- make_sen_input(
-  .text_input_id="sen_input-1", .random_button_id="sen_random-1",
-  .add_button_id="sen_add-1"
+  .text_input_id="sen_input_1", .random_button_id="sen_random_1",
+  .add_button_id="sen_add_1"
 )
 
 sen_input_2 <- make_sen_input(
-  .text_input_id="sen_input-2", .random_button_id="sen_random-2",
-  .add_button_id="sen_add-2"
+  .text_input_id="sen_input_2", .random_button_id="sen_random_2",
+  .add_button_id="sen_add_2"
 )
 
 # input_content <- tags$div(
@@ -65,9 +64,21 @@ sen_input_2 <- make_sen_input(
 # )
 legend_sentiment <- tags$svg(
   width="100%", height="4rem",
-  tags$image(href="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f641.svg", x="000%", y="0rem", height="20", width="20", transform="translate(-00,0)", style="filter: grayscale(100%);"),
-  tags$image(href="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f610.svg", x="050%", y="0rem", height="20", width="20", transform="translate(-10,0)", style="filter: grayscale(100%);"),
-  tags$image(href="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f642.svg", x="100%", y="0rem", height="20", width="20", transform="translate(-20,0)", style="filter: grayscale(100%);"),
+  tags$image(
+    href="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f641.svg",
+    x="000%", y="0rem", height="20", width="20", transform="translate(-00,0)",
+    style="filter: grayscale(100%);"
+  ),
+  tags$image(
+    href="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f610.svg",
+    x="050%", y="0rem", height="20", width="20", transform="translate(-10,0)",
+    style="filter: grayscale(100%);"
+  ),
+  tags$image(
+    href="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f642.svg",
+    x="100%", y="0rem", height="20", width="20", transform="translate(-20,0)",
+    style="filter: grayscale(100%);"
+  ),
   tags$svg(
     y="1.5rem", height="0.875rem", width="100%", viewBox="0 0 7 1", preserveAspectRatio="none",
     tags$rect(x="0", y="0", width="1.01", height="1", fill="#cf597e"),
@@ -97,6 +108,13 @@ element_intro <- tags$div(
       )
     )
   ),
+  tags$pre(
+    class="mermaid",
+    "graph LR",
+    "A[Text] --- B[Lexikon]",
+    "B-->C[fa:fa-plus positiv]",
+    "B-->D(fa:fa-minus negativ);"
+  ),
   tags$h2("Sentimentanalyse"),
   tags$div(
     p_de("Sentimentanalyse ist ein Verfahren der Data Science, das darauf abzielt, Meinungen, Emotionen und Einstellungen in Textdaten automatisch zu identifizieren und zu klassifizieren. Unternehmen setzen Sentimentanalyse häufig ein, um Kundenfeedback aus sozialen Medien, Rezensionen oder Umfragen zu analysieren. So können sie wertvolle Einblicke in Bereiche wie die Kundenzufriedenheit oder Markttrends gewinnen."),
@@ -110,36 +128,7 @@ element_content <- tags$div(
     tags$div(
       id="lexikon",
       tags$h3("Lexikonbasierte Senitmentanalyse"),
-      p_de("Die lexikonbasierte Sentimentanalyse ist die traditionelle Form des Verfahrens, bei der vorab definierte Wörterlisten, sogenannte Sentimentlexika, verwendet werden, um die Stimmung eines Textes zu bestimmen. Diese Lexika enthalten Wörter, die mit positiven oder negativen Gefühlen assoziiert sind, oft mit einem entsprechenden Gewicht, das die Stärke des Ausdrucks angibt."),
-      # tags$div(
-      #   shiny::textAreaInput(
-      #     label="Beispieltext", inputId="sen_input-1", value="", rows=5,
-      #     resize="none", width="100%"
-      #   ),
-      #   fluidRow(
-      #     column(
-      #       width=6,
-      #       bslib::input_task_button(
-      #         id="sen_random-1", class="block", label="Vorschlagen",
-      #         icon=icon("dice"), label_busy="",
-      #         icon_busy=tags$i(
-      #           class="fa-solid fa-sync fa-spin", role="presentation"
-      #         )
-      #       )
-      #     ),
-      #     column(
-      #       width=6,
-      #       bslib::input_task_button(
-      #         id="sen_add-1", class="block", label="Analysieren",
-      #         icon=icon("calculator"), label_busy="",
-      #         icon_busy=tags$i(
-      #           class="fa-solid fa-sync fa-spin", role="presentation"
-      #         )
-      #       )
-      #     )
-      #   ),
-      #   HTML("<br>")
-      # ),
+      tags$br(),
       # tags$div(
       #   tags$h4("Textaufbereitung"),
       #   p_de("Der Prozess beginnt mit der Aufbereitung der Textdaten, die sowohl verschieden Schritter der Normalisierung als auch die Tokenisierung umfasst, um den Text in eine verarbeitbare Form zu bringen."),
@@ -179,11 +168,12 @@ element_content <- tags$div(
       #   ),
       #   id="item-1-1-2"
       # ),
-      sen_input_1,
       tags$div(
-        id="lexikon-berechnung",
-        tags$h4("Berechnung"),
-        p_de("Zur Bewertung werden die Wörter des Textes mit den Einträgen im Lexikons (bspw. SentiWS oder German Polarity Clues) abgeglichen. Die aggregierten Gewichte der Wörter aus dem Lexikon geben schließlich die Gesamtstimmung des Textes wieder."),
+        id="lexikon-funktionsweise",
+        tags$h4("Funktionsweise"),
+        p_de("Die lexikonbasierte Sentimentanalyse ist die traditionelle Form des Verfahrens, bei der vorab definierte Wörterlisten, sogenannte Sentimentlexika, verwendet werden, um die Stimmung eines Textes zu bestimmen. Diese Lexika enthalten Wörter, die mit positiven oder negativen Gefühlen assoziiert sind, oft mit einem entsprechenden Gewicht, das die Stärke des Ausdrucks angibt."),
+        p_de("Zur Bewertung werden die Wörter des Textes mit den Einträgen des Lexikons (bspw. SentiWS oder German Polarity Clues) abgeglichen. Die aggregierten Gewichte der Wörter aus dem Lexikon geben schließlich die Gesamtstimmung des Textes wieder."),
+        sen_input_1,
         tags$div(
           class="grid",
           div(class="g-col-12", uiOutput(outputId="sentidict_text")),
@@ -201,54 +191,20 @@ element_content <- tags$div(
       )
     ),
     tags$div(
-      id="item-1-2",
+      id="transformer",
       tags$h3("Machine-Learning-Basierte Sentimentanalyse"),
-      p_de("Im Gegensatz zu lexikonbasierten Ansätzen bieten vortrainierte Modelle, die auf allgemeinen Sprachmodellen wie BERT (Bidirectional Encoder Representations from Transformers) basieren, eine fortschrittliche Möglichkeit zur Sentimentanalyse. Diese Modelle lernen aus einer Vielzahl von Beispielen und liefern auch in unbekannten Domänen oder bei komplexen sprachlichen Strukturen, wie Sarkasmus, verlässlichere Ergebnisse. Sie sind nicht auf spezifische Lexika angewiesen und können durch Fine-Tuning flexibel an unterschiedliche Anwendungsfälle angepasst werden, was sie besonders leistungsstark und vielseitig macht."),
-      # tags$div(
-      #   # card_title("Beispieltext"),
-      #   tagAppendAttributes(
-      #     shiny::textAreaInput(
-      #       label="Beispieltext", inputId="sen_input-278", value="", rows=5,
-      #       resize="none", width="100%"
-      #     ),
-      #   ),
-      #   fluidRow(
-      #     column(
-      #       width=6,
-      #       bslib::input_task_button(
-      #         id="sen_random-2", class="block", label="Vorschlagen",
-      #         icon=icon("dice"), label_busy="",
-      #         icon_busy=tags$i(
-      #           class="fa-solid fa-sync fa-spin", role="presentation"
-      #         ),
-      #       )
-      #     ),
-      #     column(
-      #       width=6,
-      #       bslib::input_task_button(
-      #         id="sen_add-2", class="block", label="Analysieren",
-      #         icon=icon("calculator"), label_busy="",
-      #         icon_busy=tags$i(
-      #           class="fa-solid fa-sync fa-spin", role="presentation"
-      #         ),
-      #       )
-      #     )
-      #   ),
-      #   HTML("<br>"),
-      #   style="max-height: 600px;"
-      # ),
+      tags$br(),
       tags$div(
-        id="item-1-2-1",
-        tags$h4("Berechnung"),
+        id="transformer-funktionsweise",
+        tags$h4("Funktionsweise"),
+        p_de("Im Gegensatz zu lexikonbasierten Ansätzen bieten vortrainierte Modelle, die auf allgemeinen Sprachmodellen wie BERT (Bidirectional Encoder Representations from Transformers) basieren, eine fortschrittliche Möglichkeit zur Sentimentanalyse. Diese Modelle lernen aus einer Vielzahl von Beispielen und liefern auch in unbekannten Domänen oder bei komplexen sprachlichen Strukturen, wie Sarkasmus, verlässlichere Ergebnisse. Sie sind nicht auf spezifische Lexika angewiesen und können durch Fine-Tuning flexibel an unterschiedliche Anwendungsfälle angepasst werden, was sie besonders leistungsstark und vielseitig macht."),
         sen_input_2,
         tags$div(
           fluidRow(uiOutput(outputId="germansentiment_score")),
           style="max-height: 300px; width: 100%;"
         )
       )
-    ),
-    id="item-1",
-    style="min-width=600px; max-width=600px;"
+    )
   )
 )
 #
@@ -309,12 +265,15 @@ site_theme <-
 
 element_toc <- endikau.site::format_en_toc(
   list(
-    "lexikon"="Lexikonbasierte Sentimentanalyse",
+    "lexikon"="Lexikon&shy;basierte Sentiment&shy;analyse",
     list(
-      "lexikon-berechnung"="Berechnung",
+      "lexikon-funktionsweise"="Funktions&shy;weise",
       "lexikon-kritik"="Kritik"
     ),
-    "item-1-2"="Machine-Learning-Basierte Sentiment&shy;analyse"
+    "transformer"="Machine-Learning-Basierte Sentiment&shy;analyse",
+    list(
+      "transformer-funktionsweise"="Funktions&shy;weise"
+    )
   )
 )
 
@@ -343,6 +302,7 @@ page_fillable(
   ),
   tags$script("window.onload = function() { twemoji.parse(document.body, {folder: 'svg', ext: '.svg'} ); }"),
   tags$script(src='https://cdn.jsdelivr.net/npm/@iframe-resizer/child', type='text/javascript', async=NA),
+  tags$script(type="module", "import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'"),
   tags$footer(
     tags$div(
       class="container-xxl grid align-self-center",

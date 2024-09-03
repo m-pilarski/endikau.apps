@@ -5,57 +5,57 @@ library(callr)
 #
 # plan(multisession)
 
-example_review <- paste0(
-  "Leider nicht erhalten. Schade, dass der Artikel bis heute noch nicht ",
-  "angekommen ist. Auf mehrmaliges Nachfragen wurde mir zweimal versprochen, ",
-  "dass Ersatz verschickt worden sei. Es kann schon mal vorkommen, dass eine ",
-  "Sendung verloren geht, aber dass drei!!! Warensendungen innerhalb 4 Wochen ",
-  "nicht ankommen, finde ich sehr verwunderlich. Geld wurde zurückerstattet."
-)
-
 function(input, output, session) {
 
-  vals <- reactiveValues(
-    sen_vec = example_review,
-    sentidict_tbl = endikau.data::sentiws_tbl,
-  )
+  # vals <- reactiveValues(
+  #   sen_vec = example_review,
+  #   sentidict_tbl = ,
+  # )
 
+  .sentidict_tbl_rct <- reactiveVal(endikau.data::sentiws_tbl)
+  .doc_sentidict_str_rct <- reactiveVal(example_review)
+  .doc_germansentiment_str_rct <- reactiveVal(example_review)
   .doc_germansentiment_tbl_rct <- reactiveVal(NULL)
   .germansentiment_calculating_rct <- reactiveVal(FALSE)
 
   observeEvent(
     input$sentidict, {
       if(input$sentidict == "SentiWS"){
-        vals$sentidict_tbl <- endikau.data::sentiws_tbl
+        .sentidict_tbl_rct(endikau.data::sentiws_tbl)
       }
       if(input$sentidict == "German Polarity Clues"){
-        vals$sentidict_tbl <- endikau.data::gerpolclu_tbl
+        .sentidict_tbl_rct(endikau.data::gerpolclu_tbl)
       }
     }
   )
 
   observeEvent(
-    input$`sen_random-1`, {
-      updateTextInput(
-        session=session, inputId="sen_input-1",
-        value=random_review()
-      )
-    }
+    input$sen_random_1,
+    updateTextInput(
+      session=session, inputId="sen_input_1", value=random_review()
+    )
+  )
+  observeEvent(
+    input$sen_random_2,
+    updateTextInput(
+      session=session, inputId="sen_input_2", value=random_review()
+    )
   )
 
   observeEvent(
-    input$`sen_add-1`, {
-      vals$sen_vec <- c(input$`sen_input-1`, vals$sen_vec)
-    }
+    input$sen_add_1, .doc_sentidict_str_rct(input$sen_input_1)
+  )
+  observeEvent(
+    input$sen_add_2, .doc_germansentiment_str_rct(input$sen_input_2)
   )
 
   .doc_parse_tbl_rct <- reactive(
-    vns::parse_doc_simple(.doc_str=first(vals$sen_vec))
+    vns::parse_doc_simple(.doc_str=.doc_sentidict_str_rct())
   )
 
-  .doc_sentidict_tbl_rct <- reactive(
+  .tok_sentidict_tbl_rct <- reactive(
     vns::calc_tok_sentidict_tbl(
-      .doc_str=first(vals$sen_vec), .sentidict_tbl=vals$sentidict_tbl
+      .doc_str=.doc_sentidict_str_rct(), .sentidict_tbl=.sentidict_tbl_rct()
     )
   )
 
@@ -74,7 +74,7 @@ function(input, output, session) {
       vns::calc_doc_germansentiment_tbl(
         .doc_str=..doc_str, .germansentiment_model=..germansentiment_model
       )
-    }, args=list(..doc_str=dplyr::first(vals$sen_vec)))
+    }, args=list(..doc_str=.doc_germansentiment_str_rct()))
   })
 
   observe({
@@ -92,13 +92,13 @@ function(input, output, session) {
 
   output$sentidict_table <- gt::render_gt({
 
-    .table_data <- .doc_sentidict_tbl_rct()
+    .table_data <- .tok_sentidict_tbl_rct()
 
     if(nrow(.table_data) == 0){
       NULL
     }else{
 
-    .doc_sentidict_tbl_rct() |>
+    .tok_sentidict_tbl_rct() |>
       dplyr::summarize(
         doc_text_html = stringi::stri_c(
           stringi::stri_c(
@@ -150,7 +150,7 @@ function(input, output, session) {
 
   output$sentidict_text <- renderText(
 
-    .doc_sentidict_tbl_rct() |>
+    .tok_sentidict_tbl_rct() |>
       mutate(
         tok_pol_lab =
           tok_pol_lab |>
@@ -203,7 +203,7 @@ function(input, output, session) {
   )
 
   output$sentidict_score <- renderText({
-    .doc_sentidict_tbl_rct() |>
+    .tok_sentidict_tbl_rct() |>
       slice_min(doc_id, n=1, with_ties=TRUE) |>
       mutate(
         tok_pol_col = tok_pol_lab |> as.character() |> case_match(
@@ -308,7 +308,7 @@ function(input, output, session) {
 # output$accordion <- renderUI({
 #
 #   .accordion_tbl <-
-#     .doc_sentidict_tbl_rct() |>
+#     .tok_sentidict_tbl_rct() |>
 #     dplyr::summarize(
 #       doc_text_html = stringi::stri_c(
 #         stringi::stri_c(

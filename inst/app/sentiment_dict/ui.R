@@ -299,7 +299,7 @@ page_fillable(
     `data-bs-smooth-scroll`="true"
   ),
   tags$script(
-    readr::read_file(system.file("www", "assets", "js", "toc_height.js", package="endikau.site"))
+    readr::read_file(fs::path_package("www", "assets", "js", "toc_height.js", package="endikau.site"))
   ),
   tags$script("window.onload = function() { twemoji.parse(document.body, {folder: 'svg', ext: '.svg'} ); }"),
   tags$script(src='https://cdn.jsdelivr.net/npm/@iframe-resizer/child', type='text/javascript', async=NA),

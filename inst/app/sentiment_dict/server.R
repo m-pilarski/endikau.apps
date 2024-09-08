@@ -7,11 +7,6 @@ library(callr)
 
 function(input, output, session) {
 
-  # vals <- reactiveValues(
-  #   sen_vec = example_review,
-  #   sentidict_tbl = ,
-  # )
-
   .sentidict_tbl_rct <- reactiveVal(endikau.data::sentiws_tbl)
   .doc_sentidict_str_rct <- reactiveVal(example_review)
   .doc_germansentiment_str_rct <- reactiveVal(example_review)

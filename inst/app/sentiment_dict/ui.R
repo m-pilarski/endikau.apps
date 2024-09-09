@@ -261,6 +261,8 @@ element_toc <- endikau.site::format_en_toc(
 
 element_sidebar <- tags$div(class="endikau-sidebar")
 
+
+
 page_fillable(
   tags$head(
     tags$style("@import url('https://fonts.googleapis.com/css2?family=Monoton&display=swap');"),
@@ -275,7 +277,9 @@ page_fillable(
     tags$script(src="shinyjs/inject.js"),
     withMathJax(),
     tags$script(src="https://cdn.jsdelivr.net/npm/@twemoji/api@latest/dist/twemoji.min.js", crossorigin="anonymous"),
-    tags$script(src="https://cdn.jsdelivr.net/npm/mermaid@11.1.0/dist/mermaid.min.js", crossorigin="anonymous")
+    tags$script(src="https://cdn.jsdelivr.net/npm/mermaid@11.1.0/dist/mermaid.min.js", crossorigin="anonymous"),
+    tags$script(src="https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/src/wordcloud2.min.js"),
+    tags$link(href="https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/bootstrap-responsive.min.css", rel="stylesheet")
     # tags$script(src=fs::path_package("www", "assets", "vendor", "twemoji", "twemoji.min.js", package="endikau.site"), crossorigin="anonymous")
   ),
   tags$header(
@@ -301,6 +305,62 @@ page_fillable(
       )
     )
   ),
+  tags$div(
+    tags$div(id="my_canvas"),
+    tags$script(" var db = [
+        { 'word': 'test', 'freq': 2 },
+        { 'word': 'name', 'freq': 5},
+        { 'word': 'false', 'freq': 6 },
+        { 'word': 'var', 'freq': 4 },
+        { 'word': 'test', 'freq': 5 },
+        { 'word': 'name', 'freq': 2},
+        { 'word': 'false', 'freq': 8 },
+        { 'word': 'var', 'freq': 5 },
+        { 'word': 'test', 'freq': 6 },
+        { 'word': 'name', 'freq': 3},
+        { 'word': 'false', 'freq': 8 },
+        { 'word': 'var', 'freq': 2 },
+        { 'word': 'test', 'freq': 14},
+        { 'word': 'name', 'freq': 11},
+        { 'word': 'false', 'freq': 12 },
+        { 'word': 'var', 'freq': 6 },
+    ]
+
+    list = [];
+    for (var i in db) {
+        list.push([db[i]['word'], db[i]['freq']])
+    }
+
+
+    var options = eval({
+        'list': list,
+        'gridSize': 16, // size of the grid in pixels,the larger the grid size, the bigger the gap between words.
+        'weightFactor': 10, // number to multiply for size of each word in the list
+        'fontWeight': 'normal', // 'normal', 'bold' or a callback
+        // 'fontFamily': 'Times, serif', // font to use
+        'color': function() {
+          return (['#009392','#39b185','#9ccb86','#e9e29c','#eeb479','#e88471','#cf597e'])[Math.floor(Math.random() * 7)]
+        },
+        // 'backgroundColor': '#333', // the color of canvas
+        'rotateRatio': 1, // probability for the word to rotate. 1 means always rotate
+        //'drawMask': true, // visualize the grid by draw squares to mask the drawn areas.
+        // maskColor : 'rgba(0, 0, 255, 0.8)';
+        //'minSize': 10, // not work when set number over than 'freq'
+        // 'shape': 'pentagon',
+        'ellipticity': 1.5,
+        'hover': '',
+        rotateRatio: 0.5,
+        rotationSteps: 2,
+    });
+
+    WordCloud(document.getElementById('word_cloud'), options);
+")
+  ),
+  HTML("
+   <div>
+  <canvas id='word_cloud' class='word_cloud' width='800' height='400'></canvas>
+</div>
+  "),
   tags$div(
     class="container-xxl endikau-layout-content",
     # element_intro,
@@ -337,6 +397,7 @@ page_fillable(
     readr::read_file(fs::path_package("www", "assets", "js", "toc_height.js", package="endikau.site"))
   ),
   tags$script("window.onload = function() { twemoji.parse(document.body, {folder: 'svg', ext: '.svg'} ); }"),
+  tags$script("window.onload = function() { WordCloud(document.getElementById('word_cloud'), options); }"),
   tags$script(src='https://cdn.jsdelivr.net/npm/@iframe-resizer/child', type='text/javascript', async=NA),
   # tags$script(type="module", "import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'"),
   tags$footer(

@@ -52,7 +52,7 @@ calc_doc_germansentiment_tbl_memo_each <- function(.doc_str){
 }
 
 random_review <- function(){
-  with(dplyr::slice_sample(endikau.data::amazon_review_tbl, n=1), {
+  with(dplyr::slice_sample(vns.data::amazon_review_tbl, n=1), {
     stringi::stri_c(doc_title, ". ", doc_text)
   })
 }

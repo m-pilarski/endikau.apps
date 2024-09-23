@@ -309,109 +309,19 @@ page_fillable(
       )
     )
   ),
-  tags$div(
-    tags$script("
-      var db = [
-          { 'word': 'test', 'freq': 2 },
-          { 'word': 'name', 'freq': 5},
-          { 'word': 'false', 'freq': 6 },
-          { 'word': 'var', 'freq': 4 },
-          { 'word': 'test', 'freq': 5 },
-          { 'word': 'name', 'freq': 2},
-          { 'word': 'false', 'freq': 8 },
-          { 'word': 'var', 'freq': 5 },
-          { 'word': 'test', 'freq': 6 },
-          { 'word': 'name', 'freq': 3},
-          { 'word': 'false', 'freq': 8 },
-          { 'word': 'var', 'freq': 2 },
-          { 'word': 'test', 'freq': 14},
-          { 'word': 'name', 'freq': 11},
-          { 'word': 'false', 'freq': 12 },
-          { 'word': 'var', 'freq': 6 },
-          { 'word': 'test', 'freq': 2 },
-          { 'word': 'name', 'freq': 5},
-          { 'word': 'false', 'freq': 6 },
-          { 'word': 'var', 'freq': 4 },
-          { 'word': 'test', 'freq': 5 },
-          { 'word': 'name', 'freq': 2},
-          { 'word': 'false', 'freq': 8 },
-          { 'word': 'var', 'freq': 5 },
-          { 'word': 'test', 'freq': 6 },
-          { 'word': 'name', 'freq': 3},
-          { 'word': 'false', 'freq': 8 },
-          { 'word': 'var', 'freq': 2 },
-          { 'word': 'test', 'freq': 14},
-          { 'word': 'name', 'freq': 11},
-          { 'word': 'false', 'freq': 12 },
-          { 'word': 'var', 'freq': 6 },
-          { 'word': 'test', 'freq': 2 },
-          { 'word': 'name', 'freq': 5},
-          { 'word': 'false', 'freq': 6 },
-          { 'word': 'var', 'freq': 4 },
-          { 'word': 'test', 'freq': 5 },
-          { 'word': 'name', 'freq': 2},
-          { 'word': 'false', 'freq': 8 },
-          { 'word': 'var', 'freq': 5 },
-          { 'word': 'test', 'freq': 6 },
-          { 'word': 'name', 'freq': 3},
-          { 'word': 'false', 'freq': 8 },
-          { 'word': 'var', 'freq': 2 },
-          { 'word': 'test', 'freq': 14},
-          { 'word': 'name', 'freq': 11},
-          { 'word': 'false', 'freq': 12 },
-          { 'word': 'var', 'freq': 6 },
-          { 'word': 'test', 'freq': 2 },
-          { 'word': 'name', 'freq': 5},
-          { 'word': 'false', 'freq': 6 },
-          { 'word': 'var', 'freq': 4 },
-          { 'word': 'test', 'freq': 5 },
-          { 'word': 'name', 'freq': 2},
-          { 'word': 'false', 'freq': 8 },
-          { 'word': 'var', 'freq': 5 },
-          { 'word': 'test', 'freq': 6 },
-          { 'word': 'name', 'freq': 3},
-          { 'word': 'false', 'freq': 8 },
-          { 'word': 'var', 'freq': 2 },
-          { 'word': 'test', 'freq': 14},
-          { 'word': 'name', 'freq': 11},
-          { 'word': 'false', 'freq': 12 },
-          { 'word': 'var', 'freq': 6 },
-      ]
-
-      list = [];
-      for (var i in db) {
-          list.push([db[i]['word'], db[i]['freq']])
-      }
-
-
-      var options = eval({
-          list: list,
-          gridSize: 15, // size of the grid in pixels,the larger the grid size, the bigger the gap between words.
-          weightFactor: 10, // number to multiply for size of each word in the list
-          fontWeight: 'bold', // 'normal', 'bold' or a callback
-          // 'fontFamily': 'Times, serif', // font to use
-          color: function() {
-            return (['#009392','#39b185','#9ccb86','#e9e29c','#eeb479','#e88471','#cf597e'])[Math.floor(Math.random() * 7)]
-          },
-          hover: '',
-          click: '',
-          rotateRatio: 0.5,
-          rotationSteps: 2,
-      });
-
-      WordCloud(document.getElementById('word_cloud'), options);
-    ")
-  ),
-  tags$div(
-    class="container-xxl endikau-layout-content",
-    # element_intro,
-    element_sidebar,
-    element_toc,
-    element_content,
-    tabindex="0",
-    `data-bs-spy`="scroll",
-    `data-bs-target`="#page-toc",
-    `data-bs-smooth-scroll`="true"
+  tags$section(
+    style="background: #bababa;",
+    tags$div(
+      class="container-xxl endikau-layout-content",
+      # element_intro,
+      element_sidebar,
+      element_toc,
+      element_content,
+      tabindex="0",
+      `data-bs-spy`="scroll",
+      `data-bs-target`="#page-toc",
+      `data-bs-smooth-scroll`="true"
+    )
   ),
   tags$div(
     class="container-sm",

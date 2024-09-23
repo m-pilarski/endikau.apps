@@ -7,7 +7,7 @@ library(callr)
 
 function(input, output, session) {
 
-  .sentidict_tbl_rct <- reactiveVal(endikau.data::sentiws_tbl)
+  .sentidict_tbl_rct <- reactiveVal(vns.data::sentiws_tbl)
   .doc_sentidict_str_rct <- reactiveVal(example_review)
   .doc_germansentiment_str_rct <- reactiveVal(example_review)
   .doc_germansentiment_tbl_rct <- reactiveVal(NULL)
@@ -16,10 +16,10 @@ function(input, output, session) {
   observeEvent(
     input$sentidict, {
       if(input$sentidict == "SentiWS"){
-        .sentidict_tbl_rct(endikau.data::sentiws_tbl)
+        .sentidict_tbl_rct(vns.data::sentiws_tbl)
       }
       if(input$sentidict == "German Polarity Clues"){
-        .sentidict_tbl_rct(endikau.data::gerpolclu_tbl)
+        .sentidict_tbl_rct(vns.data::gerpolclu_tbl)
       }
     }
   )

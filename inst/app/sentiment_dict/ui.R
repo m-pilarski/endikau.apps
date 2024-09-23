@@ -68,17 +68,17 @@ legend_sentiment <- tags$svg(
   width="100%", height="4rem",
   tags$image(
     href="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f641.svg",
-    x="000%", y="0rem", height="20", width="20", transform="translate(-00,0)",
+    x="000%", y="0rem", height="16", width="16", transform="translate(-00,0)",
     style="filter: grayscale(100%);"
   ),
   tags$image(
     href="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f610.svg",
-    x="050%", y="0rem", height="20", width="20", transform="translate(-10,0)",
+    x="050%", y="0rem", height="16", width="16", transform="translate(-08,0)",
     style="filter: grayscale(100%);"
   ),
   tags$image(
     href="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f642.svg",
-    x="100%", y="0rem", height="20", width="20", transform="translate(-20,0)",
+    x="100%", y="0rem", height="16", width="16", transform="translate(-16,0)",
     style="filter: grayscale(100%);"
   ),
   tags$svg(
@@ -170,10 +170,6 @@ element_content <- tags$div(
         # "D-- =0 -->F[fa:fa-face-meh negativ]",
         # "D-- &lt;0 -->G[fa:fa-face-frown negativ];"
       ),
-      tags$div(
-        class="g-col-12 d-flex justify-content-center mb-4",
-        tags$canvas(id="word_cloud", class="word_cloud", width="400", height="400")
-      ),
       bslib::card(
         bslib::card_header("Ausprobieren"),
         tags$div(
@@ -236,7 +232,8 @@ site_theme <-
     heading_font=font_google("Source Serif 4"),
     code_font=font_google("IBM Plex Mono"),
     # font_scale=1.5,
-    primary="#375f7b"
+    primary="#375f7b",
+    `bslib-spacer`=0
     # preset=c(builtin_themes(), bootswatch_themes())[4]
   ) |>
   bslib::bs_add_variables(
@@ -366,3 +363,8 @@ page_fillable(
 
 # tags$section()
 
+# use sections for background colors and put div containers in each section
+
+# htmltools::tags$html(
+#
+# )

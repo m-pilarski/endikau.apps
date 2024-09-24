@@ -392,5 +392,5 @@ tags$html(
       div(class="g-col-12", uiOutput(outputId="sentidict_score"), style="overflow-x: scroll")
     )
   ),
-  endikau.site::
+  endikau.site::html_load_custom_sass()
 )

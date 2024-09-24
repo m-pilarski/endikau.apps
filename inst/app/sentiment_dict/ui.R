@@ -392,6 +392,7 @@ tags$html(
       div(class="g-col-12", uiOutput(outputId="sentidict_score"), style="overflow-x: scroll")
     )
   ),
+  endikau.site::html_load_fonts(),
   endikau.site::html_load_custom_sass(
     .sass=list(
       sass::sass_file(fs::path_package("endikau.site", "www", "assets", "vendor", "bootstrap", "scss", "bootstrap.scss")),

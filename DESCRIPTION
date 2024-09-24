@@ -11,6 +11,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Imports: 
     callr,
+    endikau.site,
     future,
     gt,
     klartext,
@@ -22,5 +23,6 @@ Imports:
     shinyWidgets,
     vns
 Remotes: 
+    m-pilarski/endikau.site,
     m-pilarski/klartext,
     m-pilarski/vns

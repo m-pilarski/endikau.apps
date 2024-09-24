@@ -392,14 +392,5 @@ tags$html(
       div(class="g-col-12", uiOutput(outputId="sentidict_score"), style="overflow-x: scroll")
     )
   ),
-  tags$script("
-    window.onload = function() {
-      Array.prototype.forEach.call(window.parent.document.querySelectorAll('link[rel=stylesheet]'), function(link) {
-        var newLink = document.createElement('link');
-        newLink.rel = link.rel;
-        newLink.href = link.href;
-        document.head.appendChild(newLink);
-      });
-    };
-  ")
+  endikau.site::
 )

@@ -371,6 +371,7 @@ page_fillable(
 
 tags$html(
   tags$body(
+    tags$img(src="logo.png", alt="Logo"),
     tags$div(
       class="grid",
       tags$div(class="g-col-12", sen_input_1),

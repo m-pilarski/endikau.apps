@@ -1,0 +1,8 @@
+.card-header {
+	background-color: var(--nd-navbar-color) !important;
+	border-bottom: var(--bs-card-border-width) solid var(--nd-navbar-color) !important;
+}
+
+.card {
+	--bs-card-border-color: var(--nd-navbar-color) !important;
+}

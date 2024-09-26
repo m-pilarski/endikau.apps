@@ -1,0 +1,33 @@
+.btn{
+  font-size: var(--bs-body-font-size);
+}
+
+.btn-primary {
+
+  color: var(--bs-body-color) !important;
+  background-color: #e9ebe5 !important;
+  border-color: #cdcfca !important; /*set the color you want here*/
+	
+	&:hover, &:focus, &:active, &:disabled {
+		color: var(--bs-body-color) !important;
+		background-color: #cdcfca !important;
+		border-color: #b1b3ae !important; /*set the color you want here*/
+	}
+}
+
+.shiny-bound-input {
+  font-size: var(--bs-body-font-size);
+}
+
+.form-group {
+  margin-bottom: 0;
+}
+
+.form-select {
+  
+  &:focus {
+    border-color: var(--endikau-blue-light);
+  }
+  
+}
+

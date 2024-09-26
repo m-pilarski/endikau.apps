@@ -3,7 +3,7 @@ library(bslib)
 
 ################################################################################
 
-span_en <- purrr::partial(htmltools::tags$span, ...=, lang="en")
+# span_en <- purrr::partial(htmltools::tags$span, ...=, lang="en")
 
 remove_label <- function(.element){
   .element |>
@@ -59,10 +59,10 @@ sen_input_1 <- make_sen_input(
   .add_button_id="sen_add_1"
 )
 
-sen_input_2 <- make_sen_input(
-  .text_input_id="sen_input_2", .random_button_id="sen_random_2",
-  .add_button_id="sen_add_2"
-)
+# sen_input_2 <- make_sen_input(
+#   .text_input_id="sen_input_2", .random_button_id="sen_random_2",
+#   .add_button_id="sen_add_2"
+# )
 
 legend_sentiment <- tags$svg(
   width="100%", height="4rem",
@@ -99,122 +99,122 @@ legend_sentiment <- tags$svg(
   )
 )
 
-element_intro <- tags$div(
-  class="endikau-intro",
-  tags$h2("Sentimentanalyse"),
-  tags$div(
-    "Automatisierte Erkennung von Stimmungen in Texten.", style="font-size: 1.5rem;",
-  )
-)
+# element_intro <- tags$div(
+#   class="endikau-intro",
+#   tags$h2("Sentimentanalyse"),
+#   tags$div(
+#     "Automatisierte Erkennung von Stimmungen in Texten.", style="font-size: 1.5rem;",
+#   )
+# )
 
-element_content <- tags$div(
-  class="endikau-content mt-0",
-  tags$div(
-    id="einleitung", class="content-sec",
-    tags$h3("Einleitung"),
-    tags$p("Sentimentanalyse ist ein Verfahren der Data Science, das darauf abzielt, Meinungen, Emotionen und Einstellungen in Textdaten automatisch zu identifizieren und zu klassifizieren. Unternehmen setzen Sentimentanalyse häufig ein, um Kundenfeedback aus sozialen Medien, Rezensionen oder Umfragen zu analysieren. So können sie wertvolle Einblicke in Bereiche wie die Kundenzufriedenheit oder Markttrends gewinnen.")
-  ),
-  tags$div(
-    id="lexikon", class="content-sec",
-    tags$h3("Lexikonbasierte Senitmentanalyse"),
-    # tags$div(
-    #   tags$h4("Textaufbereitung"),
-    #   tags$p("Der Prozess beginnt mit der Aufbereitung der Textdaten, die sowohl verschieden Schritter der Normalisierung als auch die Tokenisierung umfasst, um den Text in eine verarbeitbare Form zu bringen."),
-    #   tags$div(
-    #     fluidRow(
-    #       gt::gt_output(outputId="parse_spacy_table"),
-    #       height="100%"
-    #     ),
-    #     style="max-height: 300px;"
-    #   ),
-    #   id="item-1-1-1"
-    # ),
-    # tags$div(
-    #   # tags$h4("Sentimentlexikon"),
-    #   tags$div(
-    #     fluidRow(
-    #       gt::gt_output(outputId="sentidict_tbl"),
-    #       HTML(
-    #         # https://tilemill-project.github.io/tilemill/docs/guides/advanced-legends/
-    #         "<div class='my-legend'>",
-    #         "  <div class='legend-title'>Sentimentwert</div>",
-    #         "  <div class='legend-scale'>",
-    #         "    <ul class='legend-labels'>",
-    #         "      <li><span class='sen-neg-max'></span>negativ</li>",
-    #         "      <li><span class='sen-neg-med'></span></li>",
-    #         "      <li><span class='sen-neg-min'></span></li>",
-    #         "      <li><span class='sen-neu'></span>neutral</li>",
-    #         "      <li><span class='sen-pos-min'></span></li>",
-    #         "      <li><span class='sen-pos-med'></span></li>",
-    #         "      <li><span class='sen-pos-max'></span>positiv</li>",
-    #         "    </ul>",
-    #         "  </div>",
-    #         "</div>"
-    #       )
-    #     ),
-    #     style="max-height: 800px;"
-    #   ),
-    #   id="item-1-1-2"
-    # ),
-    tags$div(
-      id="lexikon-funktionsweise", class="content-sec",
-      tags$h4("Funktionsweise"),
-      tags$p("Die lexikonbasierte Sentimentanalyse ist die traditionelle Form des Verfahrens, bei der vorab definierte Wörterlisten, sogenannte Sentimentlexika, verwendet werden, um die Stimmung eines Textes zu bestimmen. Diese Lexika enthalten Wörter, die mit positiven oder negativen Gefühlen assoziiert sind, oft mit einem entsprechenden Gewicht, das die Stärke des Ausdrucks angibt."),
-      tags$p("Zur Bewertung werden die Wörter des Textes mit den Einträgen des Lexikons (bspw. SentiWS oder German Polarity Clues) abgeglichen. Die aggregierten Gewichte der Wörter aus dem Lexikon geben schließlich die Gesamtstimmung des Textes wieder."),
-      tags$pre(
-        class="mermaid",
-        "flowchart LR",
-        "A[Text]--tokenisierung-->C[Abgleich mit<br>Sentimentlexikon]",
-        "C--aggregation-->D[Sentimentwert<br>des Textes]",
-        # "D-- &gt;0 -->E[fa:fa-face-smile positiv]",
-        # "D-- =0 -->F[fa:fa-face-meh negativ]",
-        # "D-- &lt;0 -->G[fa:fa-face-frown negativ];"
-      ),
-      bslib::card(
-        bslib::card_header("Ausprobieren"),
-        tags$div(
-          class="grid",
-          tags$div(class="g-col-12", sen_input_1),
-          tags$div(
-            class="g-col-12 g-col-md-6",
-            remove_label(shinyWidgets::pickerInput(
-              inputId="sentidict", label=NULL, width="100%", inline=TRUE,
-              choices=c("SentiWS", "German Polarity Clues")
-            ))
-          )
-        ),
-        tags$div(
-          class="grid",
-          div(class="g-col-12", uiOutput(outputId="sentidict_text")),
-          div(
-            class="g-col-12 d-flex justify-content-center",
-            div(class="g-col-12 g-col-md-6", legend_sentiment)
-          ),
-          div(class="g-col-12", uiOutput(outputId="sentidict_score"), style="overflow-x: scroll")
-        )
-      )
-    ),
-    tags$div(
-      id="lexikon-kritik", class="content-sec",
-      tags$h4("Kritik"),
-      tags$p("Die lexikonbasierte Sentimentanalyse ist aufgrund ihrer einfachen Implementierung und des geringen Bedarfs an Rechen- und Speicherkapazität besonders für kleine Unternehmen mit begrenzten Ressourcen attraktiv. Allerdings stößt sie in komplexen Szenarien schnell an ihre Grenzen, da sie Schwierigkeiten hat, den Kontext und die Mehrdeutigkeit von Wörtern korrekt zu erfassen. Eine Phrase wie „nicht schlecht“ kann beispielsweise fälschlicherweise als negativ interpretiert werden, obwohl sie im Kontext positiv gemeint ist."),
-    )
-  ),
-  tags$div(
-    id="transformer",
-    tags$h3("Machine-Learning-Basierte Sentimentanalyse"),
-    tags$div(
-      id="transformer-funktionsweise", class="content-sec",
-      tags$h4("Funktionsweise"),
-      tags$p("Im Gegensatz zu lexikonbasierten Ansätzen bieten vortrainierte Modelle, die auf allgemeinen Sprachmodellen wie BERT (Bidirectional Encoder Representations from Transformers) basieren, eine fortschrittliche Möglichkeit zur Sentimentanalyse. Diese Modelle lernen aus einer Vielzahl von Beispielen und liefern auch in unbekannten Domänen oder bei komplexen sprachlichen Strukturen, wie Sarkasmus, verlässlichere Ergebnisse. Sie sind nicht auf spezifische Lexika angewiesen und können durch Fine-Tuning flexibel an unterschiedliche Anwendungsfälle angepasst werden, was sie besonders leistungsstark und vielseitig macht."),
-      sen_input_2,
-      tags$div(
-        fluidRow(uiOutput(outputId="germansentiment_score")),
-        style="max-height: 300px; width: 100%;"
-      )
-    )
-  )
-)
+# element_content <- tags$div(
+#   class="endikau-content mt-0",
+#   tags$div(
+#     id="einleitung", class="content-sec",
+#     tags$h3("Einleitung"),
+#     tags$p("Sentimentanalyse ist ein Verfahren der Data Science, das darauf abzielt, Meinungen, Emotionen und Einstellungen in Textdaten automatisch zu identifizieren und zu klassifizieren. Unternehmen setzen Sentimentanalyse häufig ein, um Kundenfeedback aus sozialen Medien, Rezensionen oder Umfragen zu analysieren. So können sie wertvolle Einblicke in Bereiche wie die Kundenzufriedenheit oder Markttrends gewinnen.")
+#   ),
+#   tags$div(
+#     id="lexikon", class="content-sec",
+#     tags$h3("Lexikonbasierte Senitmentanalyse"),
+#     # tags$div(
+#     #   tags$h4("Textaufbereitung"),
+#     #   tags$p("Der Prozess beginnt mit der Aufbereitung der Textdaten, die sowohl verschieden Schritter der Normalisierung als auch die Tokenisierung umfasst, um den Text in eine verarbeitbare Form zu bringen."),
+#     #   tags$div(
+#     #     fluidRow(
+#     #       gt::gt_output(outputId="parse_spacy_table"),
+#     #       height="100%"
+#     #     ),
+#     #     style="max-height: 300px;"
+#     #   ),
+#     #   id="item-1-1-1"
+#     # ),
+#     # tags$div(
+#     #   # tags$h4("Sentimentlexikon"),
+#     #   tags$div(
+#     #     fluidRow(
+#     #       gt::gt_output(outputId="sentidict_tbl"),
+#     #       HTML(
+#     #         # https://tilemill-project.github.io/tilemill/docs/guides/advanced-legends/
+#     #         "<div class='my-legend'>",
+#     #         "  <div class='legend-title'>Sentimentwert</div>",
+#     #         "  <div class='legend-scale'>",
+#     #         "    <ul class='legend-labels'>",
+#     #         "      <li><span class='sen-neg-max'></span>negativ</li>",
+#     #         "      <li><span class='sen-neg-med'></span></li>",
+#     #         "      <li><span class='sen-neg-min'></span></li>",
+#     #         "      <li><span class='sen-neu'></span>neutral</li>",
+#     #         "      <li><span class='sen-pos-min'></span></li>",
+#     #         "      <li><span class='sen-pos-med'></span></li>",
+#     #         "      <li><span class='sen-pos-max'></span>positiv</li>",
+#     #         "    </ul>",
+#     #         "  </div>",
+#     #         "</div>"
+#     #       )
+#     #     ),
+#     #     style="max-height: 800px;"
+#     #   ),
+#     #   id="item-1-1-2"
+#     # ),
+#     tags$div(
+#       id="lexikon-funktionsweise", class="content-sec",
+#       tags$h4("Funktionsweise"),
+#       tags$p("Die lexikonbasierte Sentimentanalyse ist die traditionelle Form des Verfahrens, bei der vorab definierte Wörterlisten, sogenannte Sentimentlexika, verwendet werden, um die Stimmung eines Textes zu bestimmen. Diese Lexika enthalten Wörter, die mit positiven oder negativen Gefühlen assoziiert sind, oft mit einem entsprechenden Gewicht, das die Stärke des Ausdrucks angibt."),
+#       tags$p("Zur Bewertung werden die Wörter des Textes mit den Einträgen des Lexikons (bspw. SentiWS oder German Polarity Clues) abgeglichen. Die aggregierten Gewichte der Wörter aus dem Lexikon geben schließlich die Gesamtstimmung des Textes wieder."),
+#       tags$pre(
+#         class="mermaid",
+#         "flowchart LR",
+#         "A[Text]--tokenisierung-->C[Abgleich mit<br>Sentimentlexikon]",
+#         "C--aggregation-->D[Sentimentwert<br>des Textes]",
+#         # "D-- &gt;0 -->E[fa:fa-face-smile positiv]",
+#         # "D-- =0 -->F[fa:fa-face-meh negativ]",
+#         # "D-- &lt;0 -->G[fa:fa-face-frown negativ];"
+#       ),
+#       bslib::card(
+#         bslib::card_header("Ausprobieren"),
+#         tags$div(
+#           class="grid",
+#           tags$div(class="g-col-12", sen_input_1),
+#           tags$div(
+#             class="g-col-12 g-col-md-6",
+#             remove_label(shinyWidgets::pickerInput(
+#               inputId="sentidict", label=NULL, width="100%", inline=TRUE,
+#               choices=c("SentiWS", "German Polarity Clues")
+#             ))
+#           )
+#         ),
+#         tags$div(
+#           class="grid",
+#           div(class="g-col-12", uiOutput(outputId="sentidict_text")),
+#           div(
+#             class="g-col-12 d-flex justify-content-center",
+#             div(class="g-col-12 g-col-md-6", legend_sentiment)
+#           ),
+#           div(class="g-col-12", uiOutput(outputId="sentidict_score"), style="overflow-x: scroll")
+#         )
+#       )
+#     ),
+#     tags$div(
+#       id="lexikon-kritik", class="content-sec",
+#       tags$h4("Kritik"),
+#       tags$p("Die lexikonbasierte Sentimentanalyse ist aufgrund ihrer einfachen Implementierung und des geringen Bedarfs an Rechen- und Speicherkapazität besonders für kleine Unternehmen mit begrenzten Ressourcen attraktiv. Allerdings stößt sie in komplexen Szenarien schnell an ihre Grenzen, da sie Schwierigkeiten hat, den Kontext und die Mehrdeutigkeit von Wörtern korrekt zu erfassen. Eine Phrase wie „nicht schlecht“ kann beispielsweise fälschlicherweise als negativ interpretiert werden, obwohl sie im Kontext positiv gemeint ist."),
+#     )
+#   ),
+#   tags$div(
+#     id="transformer",
+#     tags$h3("Machine-Learning-Basierte Sentimentanalyse"),
+#     tags$div(
+#       id="transformer-funktionsweise", class="content-sec",
+#       tags$h4("Funktionsweise"),
+#       tags$p("Im Gegensatz zu lexikonbasierten Ansätzen bieten vortrainierte Modelle, die auf allgemeinen Sprachmodellen wie BERT (Bidirectional Encoder Representations from Transformers) basieren, eine fortschrittliche Möglichkeit zur Sentimentanalyse. Diese Modelle lernen aus einer Vielzahl von Beispielen und liefern auch in unbekannten Domänen oder bei komplexen sprachlichen Strukturen, wie Sarkasmus, verlässlichere Ergebnisse. Sie sind nicht auf spezifische Lexika angewiesen und können durch Fine-Tuning flexibel an unterschiedliche Anwendungsfälle angepasst werden, was sie besonders leistungsstark und vielseitig macht."),
+#       sen_input_2,
+#       tags$div(
+#         fluidRow(uiOutput(outputId="germansentiment_score")),
+#         style="max-height: 300px; width: 100%;"
+#       )
+#     )
+#   )
+# )
 
 # site_theme <-
 #   bslib::bs_theme(
@@ -369,9 +369,9 @@ element_content <- tags$div(
 #
 # )
 
-tags$html(
-  tags$body(
-    # tags$img(src="logo.png", alt="Logo"),
+endikau.site::nd_page(
+  .navbar=NULL,
+  .main=list(
     tags$div(
       class="grid",
       tags$div(class="g-col-12", sen_input_1),
@@ -392,16 +392,22 @@ tags$html(
       ),
       div(class="g-col-12", uiOutput(outputId="sentidict_score"), style="overflow-x: scroll")
     )
-  ),
-  # endikau.site::html_load_fonts(),
-  # endikau.site::html_load_custom_sass(
-  #   .sass=list(
-  #     sass::sass_file(fs::path_package("endikau.site", "www", "assets", "vendor", "bootstrap", "scss", "bootstrap.scss")),
-  #     sass::sass_file(fs::path_package("endikau.site", "www", "assets", "vendor", "bootstrap", "scss", "mixins", "_breakpoints.scss")),
-  #     sass::sass_file(fs::path_package("endikau.site", "www", "assets", "scss", "_toc.scss")),
-  #     sass::sass_file(fs::path_package("endikau.site", "www", "assets", "scss", "_text-style.scss")),
-  #     sass::sass_file(fs::path_package("endikau.site", "www", "assets", "scss", "_io.scss"))
-  #   )
-  # ),
-  tags$script(src='https://cdn.jsdelivr.net/npm/@iframe-resizer/child', type='text/javascript', async=NA)
+  )
 )
+# tags$html(
+#   tags$body(
+#     # tags$img(src="logo.png", alt="Logo"),
+#
+#   ),
+#   # endikau.site::html_load_fonts(),
+#   # endikau.site::html_load_custom_sass(
+#   #   .sass=list(
+#   #     sass::sass_file(fs::path_package("endikau.site", "www", "assets", "vendor", "bootstrap", "scss", "bootstrap.scss")),
+#   #     sass::sass_file(fs::path_package("endikau.site", "www", "assets", "vendor", "bootstrap", "scss", "mixins", "_breakpoints.scss")),
+#   #     sass::sass_file(fs::path_package("endikau.site", "www", "assets", "scss", "_toc.scss")),
+#   #     sass::sass_file(fs::path_package("endikau.site", "www", "assets", "scss", "_text-style.scss")),
+#   #     sass::sass_file(fs::path_package("endikau.site", "www", "assets", "scss", "_io.scss"))
+#   #   )
+#   # ),
+#   tags$script(src='https://cdn.jsdelivr.net/npm/@iframe-resizer/child', type='text/javascript', async=NA)
+# )

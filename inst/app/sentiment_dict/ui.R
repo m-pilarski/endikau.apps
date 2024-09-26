@@ -378,11 +378,17 @@ endikau.site::nd_page(
       tags$div(class="g-col-12", sen_input_1),
       tags$div(
         class="g-col-12 g-col-sm-6",
-        remove_label(shinyWidgets::pickerInput(
-          inputId="sentidict", label=NULL, width="100%", inline=TRUE,
+        # remove_label(
+        #   shinyWidgets::pickerInput(
+        #     inputId="sentidict", label=NULL, width="100%", inline=TRUE,
+        #     choices=c("SentiWS", "German Polarity Clues")
+        #   )
+        # )
+        radioButtons(
+          inputId="sentidict", label=Lexikon, width="100%", inline=TRUE,
           choices=c("SentiWS", "German Polarity Clues")
-        ))
-      )
+        )
+      ),
     ),
     tags$div(
       class="grid",

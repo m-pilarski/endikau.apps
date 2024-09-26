@@ -370,6 +370,7 @@ legend_sentiment <- tags$svg(
 # )
 
 endikau.site::nd_page(
+  .page_type="app"
   .navbar=NULL,
   .main=list(
     tags$div(

@@ -402,5 +402,6 @@ tags$html(
       sass::sass_file(fs::path_package("endikau.site", "www", "assets", "scss", "_text-style.scss")),
       sass::sass_file(fs::path_package("endikau.site", "www", "assets", "scss", "_io.scss"))
     )
-  )
+  ),
+  tags$script(src='https://cdn.jsdelivr.net/npm/@iframe-resizer/child', type='text/javascript', async=NA)
 )

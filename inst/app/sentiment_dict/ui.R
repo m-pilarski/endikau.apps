@@ -216,150 +216,150 @@ element_content <- tags$div(
   )
 )
 
-site_theme <-
-  bslib::bs_theme(
-    version="5",
-    # base_font=font_google("Source Serif 4"),
-    # base_font=font_google("Libre Franklin"),
-    base_font=font_google("Source Sans 3"),
-    # base_font=font_google("Open Sans"),
-    # base_font=font_google("IBM Plex Sans"),
-    # heading_font=font_google("Bebas Neue"),
-    # heading_font=font_google("Archivo Black"),
-    # heading_font=font_google("Patua One"),
-    # heading_font=font_google("Source Sans 3"),
-    # heading_font=font_google("Domine"),
-    heading_font=font_google("Source Serif 4"),
-    code_font=font_google("IBM Plex Mono"),
-    # font_scale=1.5,
-    primary="#375f7b",
-    `bslib-spacer`=0
-    # preset=c(builtin_themes(), bootswatch_themes())[4]
-  ) |>
-  bslib::bs_add_variables(
-    "enable-grid-classes"="false", "enable-cssgrid"="true"
-  ) |>
-  bs_add_rules(sass::sass_file(fs::path_package("www", "assets", "scss", "_variables.scss", package="endikau.site"))) |>
-  bs_add_rules(sass::sass_file(fs::path_package("www", "assets", "scss", "_layout.scss", package="endikau.site"))) |>
-  bs_add_rules(sass::sass_file(fs::path_package("www", "assets", "scss", "_toc.scss", package="endikau.site"))) |>
-  bs_add_rules(sass::sass_file(fs::path_package("www", "assets", "scss", "_text-style.scss", package="endikau.site"))) |>
-  bs_add_rules(sass::sass_file(fs::path_package("www", "assets", "scss", "_io.scss", package="endikau.site")))
+# site_theme <-
+#   bslib::bs_theme(
+#     version="5",
+#     # base_font=font_google("Source Serif 4"),
+#     # base_font=font_google("Libre Franklin"),
+#     base_font=font_google("Source Sans 3"),
+#     # base_font=font_google("Open Sans"),
+#     # base_font=font_google("IBM Plex Sans"),
+#     # heading_font=font_google("Bebas Neue"),
+#     # heading_font=font_google("Archivo Black"),
+#     # heading_font=font_google("Patua One"),
+#     # heading_font=font_google("Source Sans 3"),
+#     # heading_font=font_google("Domine"),
+#     heading_font=font_google("Source Serif 4"),
+#     code_font=font_google("IBM Plex Mono"),
+#     # font_scale=1.5,
+#     primary="#375f7b",
+#     `bslib-spacer`=0
+#     # preset=c(builtin_themes(), bootswatch_themes())[4]
+#   ) |>
+#   bslib::bs_add_variables(
+#     "enable-grid-classes"="false", "enable-cssgrid"="true"
+#   ) |>
+#   bs_add_rules(sass::sass_file(fs::path_package("www", "assets", "scss", "_variables.scss", package="endikau.site"))) |>
+#   bs_add_rules(sass::sass_file(fs::path_package("www", "assets", "scss", "_layout.scss", package="endikau.site"))) |>
+#   bs_add_rules(sass::sass_file(fs::path_package("www", "assets", "scss", "_toc.scss", package="endikau.site"))) |>
+#   bs_add_rules(sass::sass_file(fs::path_package("www", "assets", "scss", "_text-style.scss", package="endikau.site"))) |>
+#   bs_add_rules(sass::sass_file(fs::path_package("www", "assets", "scss", "_io.scss", package="endikau.site")))
 
-element_toc <- endikau.site::format_en_toc(
-  list(
-    "einleitung"="Einleitung",
-    "lexikon"="Lexikon&shy;basierte Sentiment&shy;analyse",
-    list(
-      "lexikon-funktionsweise"="Funktions&shy;weise",
-      "lexikon-kritik"="Kritik"
-    ),
-    "transformer"="Machine-Learning-Basierte Sentiment&shy;analyse",
-    list(
-      "transformer-funktionsweise"="Funktions&shy;weise"
-    )
-  )
-)
-
-element_sidebar <- tags$div(class="endikau-sidebar")
-
-
-
-page_fillable(
-  tags$head(
-    tags$style("@import url('https://fonts.googleapis.com/css2?family=Monoton&display=swap');"),
-    tags$style(stringi::stri_c(
-      ".monoton-regular {",
-      "  font-family: 'Monoton', system-ui;",
-      "  font-weight: 400;",
-      "  font-style: normal;",
-      "}"
-    )),
-    tags$style(".bslib-page-fill { padding: var(--bslib-spacer) 0; }"), # <<-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    tags$script(src="shinyjs/inject.js"),
-    withMathJax(),
-    tags$script(src="https://cdn.jsdelivr.net/npm/@twemoji/api@latest/dist/twemoji.min.js", crossorigin="anonymous"),
-    tags$script(src="https://cdn.jsdelivr.net/npm/mermaid@11.1.0/dist/mermaid.min.js", crossorigin="anonymous"),
-    tags$script(src="https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/src/wordcloud2.min.js"),
-    tags$link(href="https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/bootstrap-responsive.min.css", rel="stylesheet")
-    # tags$script(src=fs::path_package("www", "assets", "vendor", "twemoji", "twemoji.min.js", package="endikau.site"), crossorigin="anonymous")
-  ),
-  tags$header(
-    class="navbar navbar-expand-lg fixed-top", style="background-color: var(--endikau-blue);", class="monoton-regular",
-    tags$nav(
-      tags$a(
-        class="navbar-brand", href="#",
-        tags$img(
-          # src=fs::path_package("www", "assets", "img", "JLU_Giessen-Logo.png", package="endikau.site"),
-          height="30", class="d-inline-block align-top", alt=""
-        ),
-        tags$span("EnDiKaU", class="navbar-text mx-2", style="color: #ffffff; font-size: 30pt")
-      )
-    )
-  ),
-  tags$div(
-    style="background-color: var(--endikau-blue);",
-    tags$div(
-      class="container-xxl mt-4",
-      tags$div(
-        class="grid",
-        tags$div(class="g-col-12 g-col-md-8 g-start-md-2", style="padding: 3rem 3rem; color: white; font-weight: bold;", element_intro),
-      )
-    )
-  ),
-  tags$section(
-    style="background: #bababa;",
-    tags$div(
-      class="container-xxl endikau-layout-content",
-      # element_intro,
-      element_sidebar,
-      element_toc,
-      element_content,
-      tabindex="0",
-      `data-bs-spy`="scroll",
-      `data-bs-target`="#page-toc",
-      `data-bs-smooth-scroll`="true"
-    )
-  ),
-  tags$div(
-    class="container-sm",
-    tags$div(
-      class="g-col-12 g-col-md-6",
-      tags$select(
-        class="form-select", `aria-label`="Default select example",
-        tags$option(selected=NA, "Open this select menu"),
-        tags$option(value="1", "One"),
-        tags$option(value="2", "Two")
-      )
-    ),
-    endikau.site::format_fa_list(
-      list(
-        "fa-solid fa-check-square"="Das ist ein Test",
-        "fa-solid fa-spinner fa-pulse sen-miss"="Das hier auch",
-        list(
-          "fa-solid fa-plus fa-spin"="Hier geht es weiter 💞"
-        )
-      )
-    )
-  ),
-  tags$script(
-    readr::read_file(fs::path_package("www", "assets", "js", "toc_height.js", package="endikau.site"))
-  ),
-  tags$script("window.onload = function() { twemoji.parse(document.body, {folder: 'svg', ext: '.svg'} ); }"),
-  tags$script("window.onload = function() { WordCloud(document.getElementById('word_cloud'), options); }"),
-  tags$script(src='https://cdn.jsdelivr.net/npm/@iframe-resizer/child', type='text/javascript', async=NA),
-  # tags$script(type="module", "import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'"),
-  tags$footer(
-    tags$div(
-      class="container-xxl grid align-self-center",
-      tags$div(
-        class="g-col-12 g-col-md-8 g-start-md-4", style="margin-x: 1.5rem;",
-        !!!stringi::stri_rand_lipsum(2)
-      )
-    )
-  ),
-  theme=site_theme,
-  lang="de"
-)
+# element_toc <- endikau.site::format_en_toc(
+#   list(
+#     "einleitung"="Einleitung",
+#     "lexikon"="Lexikon&shy;basierte Sentiment&shy;analyse",
+#     list(
+#       "lexikon-funktionsweise"="Funktions&shy;weise",
+#       "lexikon-kritik"="Kritik"
+#     ),
+#     "transformer"="Machine-Learning-Basierte Sentiment&shy;analyse",
+#     list(
+#       "transformer-funktionsweise"="Funktions&shy;weise"
+#     )
+#   )
+# )
+#
+# element_sidebar <- tags$div(class="endikau-sidebar")
+#
+#
+#
+# page_fillable(
+#   tags$head(
+#     tags$style("@import url('https://fonts.googleapis.com/css2?family=Monoton&display=swap');"),
+#     tags$style(stringi::stri_c(
+#       ".monoton-regular {",
+#       "  font-family: 'Monoton', system-ui;",
+#       "  font-weight: 400;",
+#       "  font-style: normal;",
+#       "}"
+#     )),
+#     tags$style(".bslib-page-fill { padding: var(--bslib-spacer) 0; }"), # <<-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#     tags$script(src="shinyjs/inject.js"),
+#     withMathJax(),
+#     tags$script(src="https://cdn.jsdelivr.net/npm/@twemoji/api@latest/dist/twemoji.min.js", crossorigin="anonymous"),
+#     tags$script(src="https://cdn.jsdelivr.net/npm/mermaid@11.1.0/dist/mermaid.min.js", crossorigin="anonymous"),
+#     tags$script(src="https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/src/wordcloud2.min.js"),
+#     tags$link(href="https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/bootstrap-responsive.min.css", rel="stylesheet")
+#     # tags$script(src=fs::path_package("www", "assets", "vendor", "twemoji", "twemoji.min.js", package="endikau.site"), crossorigin="anonymous")
+#   ),
+#   tags$header(
+#     class="navbar navbar-expand-lg fixed-top", style="background-color: var(--endikau-blue);", class="monoton-regular",
+#     tags$nav(
+#       tags$a(
+#         class="navbar-brand", href="#",
+#         tags$img(
+#           # src=fs::path_package("www", "assets", "img", "JLU_Giessen-Logo.png", package="endikau.site"),
+#           height="30", class="d-inline-block align-top", alt=""
+#         ),
+#         tags$span("EnDiKaU", class="navbar-text mx-2", style="color: #ffffff; font-size: 30pt")
+#       )
+#     )
+#   ),
+#   tags$div(
+#     style="background-color: var(--endikau-blue);",
+#     tags$div(
+#       class="container-xxl mt-4",
+#       tags$div(
+#         class="grid",
+#         tags$div(class="g-col-12 g-col-md-8 g-start-md-2", style="padding: 3rem 3rem; color: white; font-weight: bold;", element_intro),
+#       )
+#     )
+#   ),
+#   tags$section(
+#     style="background: #bababa;",
+#     tags$div(
+#       class="container-xxl endikau-layout-content",
+#       # element_intro,
+#       element_sidebar,
+#       element_toc,
+#       element_content,
+#       tabindex="0",
+#       `data-bs-spy`="scroll",
+#       `data-bs-target`="#page-toc",
+#       `data-bs-smooth-scroll`="true"
+#     )
+#   ),
+#   tags$div(
+#     class="container-sm",
+#     tags$div(
+#       class="g-col-12 g-col-md-6",
+#       tags$select(
+#         class="form-select", `aria-label`="Default select example",
+#         tags$option(selected=NA, "Open this select menu"),
+#         tags$option(value="1", "One"),
+#         tags$option(value="2", "Two")
+#       )
+#     ),
+#     endikau.site::format_fa_list(
+#       list(
+#         "fa-solid fa-check-square"="Das ist ein Test",
+#         "fa-solid fa-spinner fa-pulse sen-miss"="Das hier auch",
+#         list(
+#           "fa-solid fa-plus fa-spin"="Hier geht es weiter 💞"
+#         )
+#       )
+#     )
+#   ),
+#   tags$script(
+#     readr::read_file(fs::path_package("www", "assets", "js", "toc_height.js", package="endikau.site"))
+#   ),
+#   tags$script("window.onload = function() { twemoji.parse(document.body, {folder: 'svg', ext: '.svg'} ); }"),
+#   tags$script("window.onload = function() { WordCloud(document.getElementById('word_cloud'), options); }"),
+#   tags$script(src='https://cdn.jsdelivr.net/npm/@iframe-resizer/child', type='text/javascript', async=NA),
+#   # tags$script(type="module", "import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'"),
+#   tags$footer(
+#     tags$div(
+#       class="container-xxl grid align-self-center",
+#       tags$div(
+#         class="g-col-12 g-col-md-8 g-start-md-4", style="margin-x: 1.5rem;",
+#         !!!stringi::stri_rand_lipsum(2)
+#       )
+#     )
+#   ),
+#   theme=site_theme,
+#   lang="de"
+# )
 
 # tags$section()
 

@@ -385,7 +385,7 @@ endikau.site::nd_page(
         #   )
         # )
         radioButtons(
-          inputId="sentidict", label=Lexikon, width="100%", inline=TRUE,
+          inputId="sentidict", label="Lexikon", width="100%", inline=TRUE,
           choices=c("SentiWS", "German Polarity Clues")
         )
       ),

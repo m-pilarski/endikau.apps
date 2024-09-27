@@ -373,6 +373,15 @@ endikau.site::nd_page(
   .page_type="app",
   .navbar=NULL,
   .main=list(
+    tags$ul(
+      class="list-group list-group-flush",
+      tags$li(
+        class="list-group-item", "Cras justo odio"
+      ),
+      tags$li(
+        class="list-group-item", "Jajaja"
+      )
+    ),
     tags$div(
       class="grid",
       tags$div(class="g-col-12", sen_input_1),

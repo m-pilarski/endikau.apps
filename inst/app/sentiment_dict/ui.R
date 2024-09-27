@@ -376,38 +376,42 @@ endikau.site::nd_page(
     tags$ul(
       class="list-group list-group-flush",
       tags$li(
-        class="list-group-item", "Cras justo odio"
+        class="list-group-item",
+        tags$h6("Eingabe"),
+        tags$div(sen_input_1),
       ),
       tags$li(
-        class="list-group-item", "Jajaja"
-      )
-    ),
-    tags$div(
-      class="grid",
-      tags$div(class="g-col-12", sen_input_1),
-      tags$div(
-        class="g-col-12 g-col-sm-6",
-        # remove_label(
-        #   shinyWidgets::pickerInput(
-        #     inputId="sentidict", label=NULL, width="100%", inline=TRUE,
-        #     choices=c("SentiWS", "German Polarity Clues")
-        #   )
-        # )
-        radioButtons(
-          inputId="sentidict", label="Lexikon", width="100%", inline=TRUE,
-          choices=c("SentiWS", "German Polarity Clues")
+        class="list-group-item",
+        tags$h6("Optionen"),
+        tags$div(
+          radioButtons(
+            inputId="sentidict", label="Lexikon", width="100%", inline=TRUE,
+            choices=c("SentiWS", "German Polarity Clues")
+          )
         )
       ),
-    ),
-    tags$div(
-      class="grid",
-      div(class="g-col-12", uiOutput(outputId="sentidict_text")),
-      div(
-        class="g-col-12 d-flex justify-content-center",
-        div(class="g-col-12 g-col-sm-6", legend_sentiment)
-      ),
-      div(class="g-col-12", uiOutput(outputId="sentidict_score"), style="overflow-x: scroll")
+      tags$li(
+        class="list-group-item",
+        tags$h6("Ergebnis"),
+        tags$div(
+          class="grid",
+          div(class="g-col-12", uiOutput(outputId="sentidict_text")),
+          div(
+            class="g-col-12 d-flex justify-content-center",
+            div(class="g-col-12 g-col-sm-6", legend_sentiment)
+          ),
+          withMathJax(),
+          div(class="g-col-12", uiOutput(outputId="sentidict_score"), style="overflow-x: scroll")
+        )
+      )
     )
+    # tags$div(
+    #   class="grid",
+    # ),
+    # tags$div(
+    #   class="grid",
+    #   ,
+    # )
   )
 )
 # tags$html(
